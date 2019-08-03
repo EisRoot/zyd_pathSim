@@ -36,9 +36,9 @@ class zyd_pathSim_algo:
         graph = init_graph()
         max_step=max_length-1
 
-        # if not self.is_connected(gene1,gene2,graph,max_step):
-        #     print( "there is no meta paths between "+gene1+" and "+gene2)
-        #     return []
+        if not self.is_connected(gene1,gene2,graph,max_step*2+1):
+            print( "there is no meta paths between "+gene1+" and "+gene2)
+            return []
         meta_paths, meta_paths_from_gene1, meta_path_from_gene2=self.find_meta_paths(gene1,gene2,graph,max_step)
         if len(meta_paths)==0:
             return []
