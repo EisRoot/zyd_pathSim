@@ -62,7 +62,9 @@ max_length=4
 if len(sys.argv)=0:
     gene1="G:HGNC:6932"
 else:
-    gene1=sys.argv[0]
+    gene1="G:HGNC:"+str(sys.argv[0])
+   
+print("the gene is: "+gene1)
 
 list_len=len(gene_node)
 cut_count=math.floor(list_len/cores)
