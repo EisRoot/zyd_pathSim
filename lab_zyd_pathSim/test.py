@@ -31,7 +31,7 @@ def mutil_prcoessing(dict_parameter):
             time = datetime.datetime.now().timestamp() - now_time
             array_time = math.floor(time / (count))
             left =array_time * (final_len - count) / (3600)
-            print("the estimated time is:"left)
+            print("the estimated time is:"+str(left))
         if gene1 == gene2:
             continue
         score = zps.start(gene1, gene2, max_length)
