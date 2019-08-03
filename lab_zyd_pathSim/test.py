@@ -29,7 +29,7 @@ def mutil_prcoessing(dict_parameter):
         if count % 10 == 0:
             time = datetime.datetime.now().timestamp() - now_time
             array_time = math.floor(time / (count))
-            left = math.floor(array_time * (final_len - count) / (3600))
+            left =array_time * (final_len - count) / (3600)
             print(left)
         if gene1 == gene2:
             continue
@@ -79,7 +79,7 @@ cut_list.append({
     })
 final_score_list =[]
 for y in pool.imap_unordered(mutil_prcoessing,cut_list):
-    final_score_list=score_list+y
+    final_score_list=final_score_list+y
 score_pd=pd.DataFrame(final_score_list)
 score_pd.to_csv("final_score.csv")
 f = open('score_list.txt', 'w')
