@@ -24,7 +24,6 @@ def mutil_prcoessing(dict_parameter):
     final_len = lens
 
     for gene2 in gene_nodes:
-        kk -= 1
         count += 1
         if count % 10 == 0:
             time = datetime.datetime.now().timestamp() - now_time
