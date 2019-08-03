@@ -62,7 +62,7 @@ max_length=4
 if len(sys.argv)==1:
     gene1="G:HGNC:6932"
 else:
-    gene1="G:HGNC:"+str(sys.argv[0])
+    gene1="G:HGNC:"+str(sys.argv[1])
    
 print("the gene is: "+gene1)
 
