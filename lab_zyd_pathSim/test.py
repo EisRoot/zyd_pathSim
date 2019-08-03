@@ -23,7 +23,7 @@ def mutil_prcoessing(dict_parameter):
     count = 0
     lens = len(gene_nodes)
     final_len = lens
-
+    score_list=[]
     for gene2 in gene_nodes:
         count += 1
         if count % 10 == 0:
@@ -56,7 +56,7 @@ print(cores)
 gene_node=read_node_file("zyd_network/node/node_gene.csv")
 
 gene1="G:HGNC:6932"
-score_list=[]
+
 max_length=4
 
 list_len=len(gene_node)
@@ -77,11 +77,11 @@ cut_list.append({
         'gene_nodes':final_piece,
         'max_length':max_length
     })
-score_list =[]
+final_score_list =[]
 for y in pool.imap_unordered(mutil_prcoessing,cut_list):
-    score_list=score_list+y
-score_pd=pd.DataFrame(score_list)
+    final_score_list=score_list+y
+score_pd=pd.DataFrame(final_score_list)
 score_pd.to_csv("final_score.csv")
 f = open('score_list.txt', 'w')
-f.write(str(score_list))
+f.write(str(final_score_list))
 f.close()
