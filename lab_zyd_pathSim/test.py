@@ -59,7 +59,7 @@ gene_node=read_node_file("zyd_network/node/node_gene.csv")
 gene1="G:HGNC:6932"
 
 max_length=4
-if len(sys.argv)=0:
+if len(sys.argv)==0:
     gene1="G:HGNC:6932"
 else:
     gene1="G:HGNC:"+str(sys.argv[0])
