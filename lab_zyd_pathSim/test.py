@@ -20,8 +20,8 @@ def mutil_prcoessing(dict_parameter):
     max_length=dict_parameter['max_length']
     now_time = datetime.datetime.now().timestamp()
     count = 0
-    len = len(gene_node)
-    final_len = len
+    lens = len(gene_node)
+    final_len = lens
 
     for gene2 in gene_nodes:
         kk -= 1
