@@ -5,6 +5,7 @@ import datetime
 import math
 import random
 import multiprocessing
+import sys
 
 def read_node_file(path):
     nodes = []
@@ -26,11 +27,11 @@ def mutil_prcoessing(dict_parameter):
     score_list=[]
     for gene2 in gene_nodes:
         count += 1
-        if count % 10 == 0:
+        if count % 30 == 0:
             time = datetime.datetime.now().timestamp() - now_time
             array_time = math.floor(time / (count))
             left =array_time * (final_len - count) / (3600)
-            print(left)
+            print("the estimated time is:"left)
         if gene1 == gene2:
             continue
         score = zps.start(gene1, gene2, max_length)
@@ -58,6 +59,10 @@ gene_node=read_node_file("zyd_network/node/node_gene.csv")
 gene1="G:HGNC:6932"
 
 max_length=4
+if len(sys.argv)=0:
+    gene1="G:HGNC:6932"
+else:
+    gene1=sys.argv[0]
 
 list_len=len(gene_node)
 cut_count=math.floor(list_len/cores)
