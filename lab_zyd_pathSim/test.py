@@ -19,6 +19,7 @@ def mutil_prcoessing(dict_parameter):
     gene_nodes=dict_parameter['gene_nodes']
     max_length=dict_parameter['max_length']
     now_time = datetime.datetime.now().timestamp()
+    zps=zyd_pathSim_algo()
     count = 0
     lens = len(gene_nodes)
     final_len = lens
@@ -53,7 +54,7 @@ print(cores)
 
 
 gene_node=read_node_file("zyd_network/node/node_gene.csv")
-zps=zyd_pathSim_algo()
+
 gene1="G:HGNC:6932"
 score_list=[]
 max_length=4
