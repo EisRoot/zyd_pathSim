@@ -61,10 +61,14 @@ gene1="G:HGNC:6932"
 max_length=4
 if len(sys.argv)==1:
     gene1="G:HGNC:6932"
+    fileName="HGNC6932"
 else:
     gene1="G:HGNC:"+str(sys.argv[1])
+    fileName="HGNC"+str(sys.argv[1])
    
 print("the gene is: "+gene1)
+
+
 
 list_len=len(gene_node)
 cut_count=math.floor(list_len/cores)
@@ -88,7 +92,7 @@ final_score_list =[]
 for y in pool.imap_unordered(mutil_prcoessing,cut_list):
     final_score_list=final_score_list+y
 score_pd=pd.DataFrame(final_score_list)
-score_pd.to_csv("final_score.csv")
-f = open('score_list.txt', 'w')
+score_pd.to_csv("final_score_"+fileName+".csv")
+f = open('score_list_'+fileName+'.txt', 'w')
 f.write(str(final_score_list))
 f.close()
