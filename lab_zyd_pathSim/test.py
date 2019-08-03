@@ -4,6 +4,7 @@ import pandas as pd
 import datetime
 import math
 import random
+import multiprocessing
 
 def read_node_file(path):
     nodes = []
@@ -13,47 +14,70 @@ def read_node_file(path):
             line = line[:-1]
             nodes.append(line)
     return nodes
+def mutil_prcoessing(gene1,gene_nodes,max_length):
+    now_time = datetime.datetime.now().timestamp()
+    count = 0
+    len = len(gene_node)
+    final_len = len
+
+    for gene2 in gene_nodes:
+        kk -= 1
+        count += 1
+        if count % 10 == 0:
+            time = datetime.datetime.now().timestamp() - now_time
+            array_time = math.floor(time / (count))
+            left = math.floor(array_time * (final_len - count) / (3600))
+            print(left)
+        if gene1 == gene2:
+            continue
+        score = zps.start(gene1, gene2, max_length)
+        if score.__len__() > 0:
+            print(score)
+        score_list = score_list + score
+
+    try:
+        score_pd = pd.DataFrame(score_list)
+        score_pd.to_csv("lab_result/final_score_step.csv", mode='a')
+        f = open('lab_result/score_list_step.txt', 'a')
+        f.write(str(score_list))
+        f.close()
+    except PermissionError:
+        print('error')
+    return score_list
+
+cores = multiprocessing.cpu_count()
+pool = multiprocessing.Pool(processes=cores)
+print(cores)
+
 
 gene_node=read_node_file("zyd_network/node/node_gene.csv")
 zps=zyd_pathSim_algo()
 gene1="G:HGNC:6932"
 score_list=[]
 max_length=4
-now_time = datetime.datetime.now().timestamp()
-count=0
-len=len(gene_node)
-final_len=len
-kk=10
-round=0
-for gene2 in gene_node:
-    kk-=1
-    count+=1
-    if count%10==0:
-        time = datetime.datetime.now().timestamp() - now_time
-        array_time = math.floor(time / (count))
-        left = math.floor(array_time * (final_len - count) / (3600))
-        print(left)
-    if gene1==gene2:
-        continue
-    score=zps.start(gene1,gene2,max_length)
-    if score.__len__() > 0:
-        print(score)
-    score_list=score_list+score
 
-    if kk ==0:
-        try:
-            score_pd = pd.DataFrame(score_list)
-            score_pd.to_csv("lab_result/final_score.csv",mode='w')
-            f = open('lab_result/score_list.txt', 'w')
-            f.write(str(score_list))
-            f.close()
-            kk=1000
-            round+=1
-        except PermissionError:
-            print('error')
-
+list_len=len(gene_node)
+cut_count=math.floor(list_len/cores)
+each=math.floor(list_len/cut_count)
+cut_list=[]
+for i in range(0,cut_count-2):
+    piece=gene_node[i*each:i*each+each-1]
+    cut_list.append({
+        'gene1':gene1,
+        'gene_nodes':piece,
+        'max_length':max_length
+    })
+i=cut_count-1
+final_piece=gene_node[i*each:list_len-1]
+cut_list.append({
+        'gene1':gene1,
+        'gene_nodes':final_piece,
+        'max_length':max_length
+    })
+score_list =[]
+for y in pool.imap_unordered(mutil_prcoessing,cut_list):
+    score_list=score_list+y
 score_pd=pd.DataFrame(score_list)
-
 score_pd.to_csv("final_score.csv")
 f = open('score_list.txt', 'w')
 f.write(str(score_list))
