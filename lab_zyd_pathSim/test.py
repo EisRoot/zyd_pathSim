@@ -14,7 +14,10 @@ def read_node_file(path):
             line = line[:-1]
             nodes.append(line)
     return nodes
-def mutil_prcoessing(gene1,gene_nodes,max_length):
+def mutil_prcoessing(dict_parameter):
+    gene1=dict_parameter['gene1']
+    gene_nodes=dict_parameter['gene_nodes']
+    max_length=dict_parameter['max_length']
     now_time = datetime.datetime.now().timestamp()
     count = 0
     len = len(gene_node)
