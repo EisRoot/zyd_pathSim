@@ -4,10 +4,6 @@ import networkx as nx
 import math
 
 class zyd_pathSim_algo:
-    """
-    1.score阈值，超过既定的阈值的pair可以直接舍弃掉；或者没有我们所要的meta_path的pair也可以舍弃掉
-
-    """
 
     def __init__(self):
         self.map={}
@@ -47,7 +43,7 @@ class zyd_pathSim_algo:
         for i in score_list:
             i['gene1']=gene1
             i['gene2']=gene2
-        return score_list
+        return meta_paths
 
     def is_connected(self,gene1,gene2,graph,max_step):
         """
