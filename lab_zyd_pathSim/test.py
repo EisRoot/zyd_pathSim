@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from DGAS_Limit import DGAS_limit_core
 from DGAS_FMP import FMP_algo
+from build_graph import init_graph
 import pandas as pd
 import datetime
 import math
 import multiprocessing
 import sys
+import os
 
 def read_node_file(path):
     nodes = []
@@ -20,24 +22,25 @@ def mutil_prcoessing(dict_parameter):
     gene_nodes=dict_parameter['gene_nodes']
     max_length=dict_parameter['max_length']
     limit=dict_parameter['limit']
+    graph=dict_parameter['graph']
     now_time = datetime.datetime.now().timestamp()
-    algo=DGAS_limit_core(limit)
+    algo=DGAS_limit_core(limit,graph)
     count = 0
     lens = len(gene_nodes)
     final_len = lens
     score_list=[]
     for gene2 in gene_nodes:
         count += 1
-        if count % 30 == 0:
+        if count % 100 == 0:
             time = datetime.datetime.now().timestamp() - now_time
-            array_time = math.floor(time / (count))
-            left =array_time * (final_len - count) / (3600)
-            print("the estimated time is:"+str(left)[0:5]+" min")
+            array_time = time / (count)
+            left =array_time * (final_len - count) / (60)
+            print("the estimated time of processing:"+str(os.getpid())+" is:"+str(left)[0:5]+" min")
         if gene1 == gene2:
             continue
         score = algo.start(gene1, gene2, max_length)
-        if score.__len__() > 0:
-            print(score)
+        # if score.__len__() > 0:
+        #     print(score)
         score_list = score_list + score
 
     try:
@@ -49,11 +52,12 @@ def mutil_prcoessing(dict_parameter):
     except PermissionError:
         print('error')
     return score_list
-def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit):
+def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_processings):
     list_len = len(gene_nodes)
     cut_count = math.floor(list_len / cores)
     cut_list = []
     print("Split data("+str(list_len)+") into "+str(cores)+" set:")
+    graph=init_graph()
 
     for i in range(0, cores-1):
         print(str(i * cut_count)+"--"+str(i * cut_count + cut_count - 1))
@@ -62,7 +66,8 @@ def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit):
             'gene1': gene1,
             'gene_nodes': piece,
             'max_length': max_length,
-            'limit':limit
+            'limit':limit,
+            'graph':graph
         })
     i = cores-1
     final_piece = gene_nodes[i * cut_count:list_len - 1]
@@ -71,7 +76,8 @@ def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit):
         'gene1': gene1,
         'gene_nodes': final_piece,
         'max_length': max_length,
-        'limit':limit
+        'limit':limit,
+        'graph': graph
     })
     return cut_list
 def get_parameter():
@@ -117,7 +123,7 @@ if __name__ == '__main__':
     g2='G:HGNC:9236'
     fileName="6932_9236"
     max_length=4
-    zyd=FMP_algo()
+    zyd=FMP_algo(init_graph())
     print("Begin to found meta path between " + g1 + " and " + g2)
     meta_path_candidate=zyd.start(g1,g2,max_length*2-1)
     print(str(len(meta_path_candidate))+" meta paths were found")
@@ -135,10 +141,11 @@ if __name__ == '__main__':
     print("The number of cpu cores is "+str(cores))
     gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
 
+
     cores_for_gene1=math.floor(cores/2)
     cores_for_gene2=cores-cores_for_gene1
-    multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit)
-    multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g1,meta_path_limit)
+    multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores)
+    multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g1,meta_path_limit,cores)
     multi_prcoessing_data=multi_prcoessing_data1+multi_prcoessing_data2
 
     final_score_list =[]

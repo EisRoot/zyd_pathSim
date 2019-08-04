@@ -1,6 +1,4 @@
-from build_graph import init_graph
 import networkx as nx
-
 import math
 
 class DGAS_core:
@@ -8,10 +6,11 @@ class DGAS_core:
     1.改变搜索策略
     """
 
-    def __init__(self):
+    def __init__(self,graph):
         self.map={}
         self.map1={}
         self.map2={}
+        self.graph=graph
 
     def start(self,gene1,gene2,max_length):
         """
@@ -33,7 +32,8 @@ class DGAS_core:
         self.map1 = {}
         self.map2 = {}
 
-        graph = init_graph()
+
+        graph = self.graph
         max_step=max_length-1
 
         if not self.is_connected(gene1,gene2,graph,max_step*2+1):

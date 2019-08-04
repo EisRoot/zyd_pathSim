@@ -1,15 +1,15 @@
-from build_graph import init_graph
 import networkx as nx
-
 import math
+import datetime
 
 class DGAS_limit_core:
 
-    def __init__(self,limit):
+    def __init__(self,limit,graph):
         self.map={}
         self.map1={}
         self.map2={}
         self.limit=limit
+        self.graph=graph
 
     def start(self,gene1,gene2,max_length):
         """
@@ -30,8 +30,7 @@ class DGAS_limit_core:
         self.map = {}
         self.map1 = {}
         self.map2 = {}
-
-        graph = init_graph()
+        graph = self.graph
         max_step=max_length-1
 
         # if not self.is_connected(gene1,gene2,graph,max_step*2+1):
@@ -88,8 +87,10 @@ class DGAS_limit_core:
         hmPaths = self.map1
         self.find_meta_paths_g2_center(gene2, graph, center, self.get_node_type(gene2),gene2)
         tmPaths = self.map2
-
         mPaths=self.match_meta_path(hmPaths,tmPaths)
+
+        # print(time2-time1)
+        # print(time3-time2)
 
         return mPaths,hmPaths,tmPaths
 
@@ -154,7 +155,6 @@ class DGAS_limit_core:
             return 0
         else:
             k-=1
-
         for neighbors in graph.neighbors(gene):
             # avoid creating circle in the meta path
             if neighbors == old_node:

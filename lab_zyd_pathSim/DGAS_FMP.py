@@ -1,12 +1,10 @@
-from build_graph import init_graph
 import networkx as nx
-
-import math
 
 class FMP_algo:
 
-    def __init__(self):
+    def __init__(self,graph):
         self.map={}
+        self.graph=graph
 
     def start(self,gene1,gene2,max_length):
         """
@@ -25,7 +23,7 @@ class FMP_algo:
                 ]
         """
         self.map = {}
-        graph = init_graph()
+        graph = self.graph
         max_step=max_length-1
         meta_paths=self.find_meta_paths(gene1,gene2,graph,max_step)
         if len(meta_paths)==0:
