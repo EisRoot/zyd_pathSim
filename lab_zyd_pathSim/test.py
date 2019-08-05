@@ -42,15 +42,7 @@ def mutil_prcoessing(dict_parameter):
         # if score.__len__() > 0:
         #     print(score)
         score_list = score_list + score
-
-    try:
-        score_pd = pd.DataFrame(score_list)
-        score_pd.to_csv("lab_result/final_score_step_"+gene1+".csv", mode='a')
-        f = open('lab_result/score_list_step_'+gene1+'.txt', 'a')
-        f.write(str(score_list))
-        f.close()
-    except PermissionError:
-        print('error')
+    print(" ############Processing:"+str(os.getpid())+" is done ###################")
     return score_list
 def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_processings):
     list_len = len(gene_nodes)
@@ -82,8 +74,9 @@ def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_proces
     return cut_list
 def get_parameter():
     if len(sys.argv) < 3:
-        print("please input two gene id!")
-        exit()
+        print(" Use G:HGNC:6932 and G:HGNC:9236 as input")
+        #exit()
+        return None,None,None
         # gene1="G:HGNC:6932"
         # fileName="HGNC6932"
     else:
@@ -116,21 +109,46 @@ def cut_meta_path(mPath):
             print("This meta path:" + mPath + " is not symmetrical")
             return None
 
+def read_rank(pd,meta_path_candidate,gene1,gene2):
+    rank_list=[]
+    for meta_path in meta_path_candidate:
+        pd2 = pd[pd['mPath'] == meta_path]
+        pd2=pd2.sort_values('score',ascending=False)
+        pd2['score_rank']=pd2['score'].rank(method='dense',ascending=False)
+        max_rank=pd2['score_rank'].max()
+        pd3=pd2[
+            (pd2['gene1']==gene1)&
+            (pd2['gene2']==gene2)
+            ]
+        meta_path_rank=pd3.iloc[0]['score_rank']
+        rank_list.append({
+            "meta_path_rank":meta_path_rank,
+            "meta_path":meta_path,
+            "gene1":gene1,
+            "gene2":gene2,
+            "total_rank":max_rank
+        })
+
+    return rank_list
+
 
 if __name__ == '__main__':
-    #g1,g2,fileName=get_parameter()
-    g1='G:HGNC:6932'
-    g2='G:HGNC:9236'
-    fileName="6932_9236"
+    g1,g2,fileName=get_parameter()
+    if g1==None:
+        g1='G:HGNC:6932'
+        g2='G:HGNC:9236'
+        fileName="6932_9236"
     max_length=4
     zyd=FMP_algo(init_graph())
     print("Begin to found meta path between " + g1 + " and " + g2)
     meta_path_candidate=zyd.start(g1,g2,max_length*2-1)
     print(str(len(meta_path_candidate))+" meta paths were found")
     meta_path_limit=[]
+    meta_path_chosen=[]
     for candidate in meta_path_candidate:
         meta_path=cut_meta_path(candidate)
         if not meta_path == None:
+            meta_path_chosen.append(candidate)
             print(candidate+"---"+meta_path)
             meta_path_limit.append(meta_path)
 
@@ -145,16 +163,27 @@ if __name__ == '__main__':
     cores_for_gene1=math.floor(cores/2)
     cores_for_gene2=cores-cores_for_gene1
     multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores)
-    multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g1,meta_path_limit,cores)
+    multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g2,meta_path_limit,cores)
     multi_prcoessing_data=multi_prcoessing_data1+multi_prcoessing_data2
 
     final_score_list =[]
     for y in pool.imap_unordered(mutil_prcoessing,multi_prcoessing_data):
         final_score_list=final_score_list+y
     score_pd=pd.DataFrame(final_score_list)
-    score_pd.to_csv("final_score_"+fileName+".csv")
-    f = open('score_list_'+fileName+'.txt', 'w')
-    f.write(str(final_score_list))
-    f.close()
+    score_pd.to_csv("lab_result/final_score_"+fileName+".csv")
+
+    # score_pd=pd.read_csv("final_score_6932_9236.csv")
+    # meta_path_candidate=['GTG','GDpDpDG']
+    rank_list=read_rank(score_pd,meta_path_candidate,g1,g2)
+    rank_pd=pd.DataFrame(rank_list)
+    rank_pd = rank_pd.sort_values('meta_path_rank')
+    first_one=rank_pd.iloc[0]
+    print("The result is:")
+    print("Meta path:"+first_one['meta_path']+", rank is "+str(int(first_one['meta_path_rank']))+" and total rank is "+str(int(first_one['total_rank'])))
+    rank_pd.to_csv("lab_result/final_result_"+fileName+".csv")
+
+
+
+
 
 
