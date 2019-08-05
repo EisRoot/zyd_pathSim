@@ -67,7 +67,7 @@ class FMP_algo:
                 hmPaths: meta paths between gene1 and center nodes
                 tmPaths: meta paths between gene2 and center nodes
         """
-        self.find_meta_paths_between_g1_g2(gene1, gene2, graph,max_step, self.get_node_type(gene1), {})
+        self.find_meta_paths_between_g1_g2(gene1, gene2, graph,max_step, self.get_node_type(gene1),[])
         mPaths =self.map
         return mPaths
 
@@ -90,7 +90,7 @@ class FMP_algo:
             k-=1
         for neighbors in graph.neighbors(gene1):
             # avoid creating circle in the meta path
-            if neighbors==old_node:
+            if neighbors in old_node:
                 continue
             type2=self.get_node_type(neighbors)
             mPathName2=mPathName+type2
@@ -104,8 +104,9 @@ class FMP_algo:
             # use pruning strategy
             if self.pruning(mPathName2):
                 continue
-
-            self.find_meta_paths_between_g1_g2(neighbors,gene2,graph,k,mPathName2,gene1)
+            #print(neighbors)
+            old_node.append(gene1)
+            self.find_meta_paths_between_g1_g2(neighbors,gene2,graph,k,mPathName2,old_node)
     def pruning(self,mPathName):
         """
         pruning strategy
