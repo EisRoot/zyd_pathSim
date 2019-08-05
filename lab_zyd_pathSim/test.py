@@ -174,7 +174,7 @@ if __name__ == '__main__':
 
     # score_pd=pd.read_csv("final_score_6932_9236.csv")
     # meta_path_candidate=['GTG','GDpDpDG']
-    rank_list=read_rank(score_pd,meta_path_candidate,g1,g2)
+    rank_list=read_rank(score_pd,meta_path_chosen,g1,g2)
     rank_pd=pd.DataFrame(rank_list)
     rank_pd = rank_pd.sort_values('meta_path_rank')
     first_one=rank_pd.iloc[0]
