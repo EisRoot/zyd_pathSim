@@ -1,0 +1,4 @@
+,gene1,gene2,meta_path,meta_path_rank,total_rank
+1,G:HGNC:6932,G:HGNC:9236,GDG,2.0,5.0
+2,G:HGNC:6932,G:HGNC:9236,GTG,728.0,934.0
+0,G:HGNC:6932,G:HGNC:9236,GDpDpDG,4454.0,4743.0
