@@ -1,0 +1,4 @@
+,gene1,gene2,meta_path,meta_path_rank,total_rank
+2,G:HGNC:9236,G:HGNC:5024,GTG,78.0,1199.0
+1,G:HGNC:9236,G:HGNC:5024,GPdPdPG,165.0,1308.0
+0,G:HGNC:9236,G:HGNC:5024,GDpDpDG,1638.0,5375.0
