@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from DGAS_Limit import DGAS_limit_core
-from DGAS_FMP import FMP_algo
+from DGAS_FMPV2 import FMP_algo
 from build_graph import init_graph
 import pandas as pd
 import datetime
@@ -141,7 +141,10 @@ if __name__ == '__main__':
     max_length=4
     zyd=FMP_algo(init_graph())
     print("Begin to found meta path between " + g1 + " and " + g2)
-    meta_path_candidate=zyd.start(g1,g2,max_length*2-1)
+    meta_path_candidate=[]
+    re=zyd.start(g1,g2,max_length)
+    for r in re:
+        meta_path_candidate.append(r["meta_path_name"])
     print(str(len(meta_path_candidate))+" meta paths were found")
     meta_path_limit=[]
     meta_path_chosen=[]
@@ -171,6 +174,7 @@ if __name__ == '__main__':
         final_score_list=final_score_list+y
     score_pd=pd.DataFrame(final_score_list)
     score_pd.to_csv("lab_result/final_score_"+fileName+".csv")
+    print(score_pd)
 
     # score_pd=pd.read_csv("final_score_6932_9236.csv")
     # meta_path_candidate=['GTG','GDpDpDG']

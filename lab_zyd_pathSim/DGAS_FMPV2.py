@@ -1,59 +1,41 @@
 import networkx as nx
 import math
-import datetime
 
-class DGAS_limit_core:
+class FMP_algo:
+    """
+    1.改变搜索策略
+    """
 
-    def __init__(self,limits,graph):
+    def __init__(self,graph):
         self.map={}
         self.map1={}
         self.map2={}
-        self.limit=[]
-        for i in limits:
-            flag = True
-            for k in limits:
-                if i==k:
-                    continue
-                elif i in k:
-                    flag=False
-            if flag:
-                self.limit.append(i)
-        print(self.limit)
         self.graph=graph
 
+
     def start(self,gene1,gene2,max_length):
+        self.ccc=0
         """
         :param gene1:
         :param gene2:
         :param max_length: max length of meta path.
-        :return:score_list
-                like [
-                {
-                'mPath': 'GMDMG',
-                'score': 0.4,
-                'ins': 3,   instance of meta Path
-                'gene1': 'G:HGNC:17256',
-                'gene2': 'G:HGNC:21497'
-                }
-                ]
+        :return:meta_paths
         """
         self.map = {}
         self.map1 = {}
         self.map2 = {}
+
+
         graph = self.graph
         max_step=max_length-1
 
-        # if not self.is_connected(gene1,gene2,graph,max_step*2+1):
-        #     print( "there is no meta paths between "+gene1+" and "+gene2)
-        #     return []
-        meta_paths, meta_paths_from_gene1, meta_path_from_gene2=self.find_meta_paths(gene1,gene2,graph,max_step)
+        if not self.is_connected(gene1,gene2,graph,max_step*2+1):
+            print( "there is no meta paths between "+gene1+" and "+gene2)
+            return []
+        meta_paths=self.find_meta_paths(gene1,gene2,graph,max_step)
         if len(meta_paths)==0:
             return []
-        score_list=self.score(meta_paths,meta_paths_from_gene1,meta_path_from_gene2)
-        for i in score_list:
-            i['gene1']=gene1
-            i['gene2']=gene2
-        return score_list
+        return meta_paths
 
     def is_connected(self,gene1,gene2,graph,max_step):
         """
@@ -99,10 +81,7 @@ class DGAS_limit_core:
         tmPaths = self.map2
         mPaths=self.match_meta_path(hmPaths,tmPaths)
 
-        # print(time2-time1)
-        # print(time3-time2)
-
-        return mPaths,hmPaths,tmPaths
+        return mPaths
 
     def match_meta_path(self,head_map,tail_map):
         meta_path_list=[]
@@ -134,6 +113,9 @@ class DGAS_limit_core:
                                 for c2 in check_nodes2:
                                     if len(set(c1).intersection(set(c2)))>0:
                                         meta_count-=1
+
+
+
                                         #{'mPath': 'GMDpDMG', 'score': 0.8, 'ins': 96, 'gene1': 'G:HGNC:9884','gene2': 'G:HGNC:24086'}
                                         #{'mPath': 'GMDpDMG', 'score': 0.5333333333333333, 'ins': 64, 'gene1': 'G:HGNC:9884', 'gene2': 'G:HGNC:24086'}]
 
@@ -141,7 +123,6 @@ class DGAS_limit_core:
                     continue
                 meta_path_list.append({
                     "meta_path_name":meta_path_name,
-                    "half":i,
                     "ins":meta_count,
 
                 })
@@ -165,22 +146,23 @@ class DGAS_limit_core:
             return 0
         else:
             k-=1
+
         for neighbors in graph.neighbors(gene):
             # avoid creating circle in the meta path
             if neighbors == old_node:
                 continue
-            type2 = self.get_node_type(neighbors)
-            m_path_name2 = mPathName + type2
+            new_path_name_detail=path_name_detail+"|"+neighbors
+            type2=self.get_node_type(neighbors)
+            m_path_name2=mPathName+type2
             # use pruning strategy
             if self.pruning(m_path_name2):
                 continue
-            new_path_name_detail=path_name_detail+"|"+neighbors
             self.save_map1(m_path_name2, neighbors,new_path_name_detail)
             if self.pruning2(m_path_name2):
                 continue
             self.find_meta_paths_g1_center(neighbors, graph, k, m_path_name2, new_path_name_detail,old_node=gene)
 
-    def find_meta_paths_g2_center(self, gene, graph, k, mPathName, path_name_detail,old_node=None):
+    def find_meta_paths_g2_center(self, gene, graph, k, mPathName, path_name_detail, old_node=None):
         """
         Find all meta paths between two nodes within max_step.
         The loop stops only when k = 0.
@@ -200,12 +182,12 @@ class DGAS_limit_core:
             # avoid creating circle in the meta path
             if neighbors == old_node:
                 continue
+            new_path_name_detail = path_name_detail + "|" + neighbors
             type2 = self.get_node_type(neighbors)
             m_path_name2 = mPathName + type2
             # use pruning strategy
             if self.pruning(m_path_name2):
                 continue
-            new_path_name_detail = path_name_detail + "|" + neighbors
             self.save_map2(m_path_name2, neighbors, new_path_name_detail)
             if self.pruning2(m_path_name2):
                 continue
@@ -260,13 +242,15 @@ class DGAS_limit_core:
         :param mPathName: String
         :return: True or False
         """
-
         if mPathName[-1]=="G":
             return True
-        elif not any(mPathName in k for k in self.limit):
+        elif mPathName=="GMDM":
+            return True
+        elif mPathName=="GPdP":
             return True
         else:
             return False
+
     def pruning2(self,mPathName):
         """
         pruning strategy
@@ -274,10 +258,12 @@ class DGAS_limit_core:
         :param mPathName: String
         :return: True or False
         """
-
-        if any(mPathName == k for k in self.limit):
-
+        if mPathName[-1]=="G":
             return True
+        # elif mPathName=="GMD":
+        #     return True
+        # elif mPathName=="GPd":
+        #     return True
         else:
             return False
     def get_node_type(self,node):
@@ -321,39 +307,6 @@ class DGAS_limit_core:
             tail2center=mPath[center:le][::-1]
             return head2center,tail2center
 
-    def score(self,mPaths,mPathDict1,mPathDict2):
-        """
 
-        :param mPaths: meta paths between gene1 and gene2
-        :param mPathDict1: meta paths between gene1 and center nodes
-        :param mPathDict2: meta paths between gene2 and center nodes
-        :return: score_list:
-        """
-        score_list=[]
-        for a in mPaths:
-            mPath=a['meta_path_name']
-            ins=a['ins']
-            meta_path_half=a['half']
-            hmIns=self.get_ins_of_meta_path(meta_path_half,mPathDict1)
-            tmIns=self.get_ins_of_meta_path(meta_path_half,mPathDict2)
-            score=self.score_kernal_function(ins,hmIns,tmIns)
-            score_list.append({
-                'mPath':mPath,
-                'score':score,
-                'ins':ins
-            })
-
-        return score_list
-
-    def score_kernal_function(self,ins,hmIns,tmIns):
-        """
-        The score function
-        :param ins: instance of meta path
-        :param hmIns: instance of meta path from head to center node
-        :param tmIns: instance of meta path from tail to center node
-        :return: score
-        """
-        score=2*ins/(hmIns+tmIns)
-        return score
 
 
