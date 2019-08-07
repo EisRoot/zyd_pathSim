@@ -133,7 +133,7 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
 
 
 if __name__ == '__main__':
-    time1=datetime.datetime.timestamp()
+    time1=datetime.datetime.now().timestamp()
     g1,g2,fileName=get_parameter()
     if g1==None:
         g1='G:HGNC:6932'
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     first_one=rank_pd.iloc[0]
     print("The result is:")
     print("Meta path:"+first_one['meta_path']+", rank is "+str(int(first_one['meta_path_rank']))+" and total rank is "+str(int(first_one['total_rank'])))
-    time2=datetime.datetime.timestamp()
+    time2=datetime.datetime.now().timestamp()
     print("Cost time:")
     cost_time=(time2-time1)/60
     print(str(cost_time)[0:4])
