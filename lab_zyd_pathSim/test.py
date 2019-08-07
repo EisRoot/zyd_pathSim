@@ -157,7 +157,7 @@ if __name__ == '__main__':
             meta_path_limit.append(meta_path)
 
 
-    cores = multiprocessing.cpu_count()-2
+    cores = 16
     multiprocessing.freeze_support()
     pool = multiprocessing.Pool(processes=cores)
     print("The number of cpu cores is "+str(cores))
