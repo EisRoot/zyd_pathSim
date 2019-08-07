@@ -1,6 +1,6 @@
 from build_graph import init_graph
 import pandas as pd
-from DGAS_FMPV2 import DGAS_core
+from DGAS_FMPV2 import FMP_algo
 def read_node_file(path):
     nodes = []
     with open(path, "r",encoding='UTF-8-sig') as fp:
@@ -21,7 +21,7 @@ def get_node_type(node):
 nodes=read_node_file("4DegreeGene_HGNCID.csv")
 print(nodes)
 max_length=4
-algo=DGAS_core(init_graph())
+algo=FMP_algo(init_graph())
 for i in nodes:
     for j in nodes:
         if not i ==j:
