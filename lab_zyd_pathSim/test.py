@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from DGAS_Limit import DGAS_limit_core
 from DGAS_FMPV2 import FMP_algo
-from build_graph import init_graph
+from build_graph import init_graph,read_node_file
 import pandas as pd
 import datetime
 import math
@@ -9,14 +9,6 @@ import multiprocessing
 import sys
 import os
 
-def read_node_file(path):
-    nodes = []
-    with open(path, "r",encoding='UTF-8-sig') as fp:
-        lines = fp.readlines()
-        for line in lines:
-            line = line[:-1]
-            nodes.append(line)
-    return nodes
 def mutil_prcoessing(dict_parameter):
     gene1=dict_parameter['gene1']
     gene_nodes=dict_parameter['gene_nodes']
@@ -108,7 +100,6 @@ def cut_meta_path(mPath):
         else:
             print("This meta path:" + mPath + " is not symmetrical")
             return None
-
 def read_rank(pd,meta_path_candidate,gene1,gene2):
     rank_list=[]
     for meta_path in meta_path_candidate:
@@ -136,8 +127,8 @@ if __name__ == '__main__':
     time1=datetime.datetime.now().timestamp()
     g1,g2,fileName=get_parameter()
     if g1==None:
-        g1='G:HGNC:6932'
-        g2='G:HGNC:9236'
+        g1='G:HGNC:3433'
+        g2='G:HGNC:17097'
         fileName="6932_9236"
     max_length=4
     zyd=FMP_algo(init_graph())
@@ -157,7 +148,7 @@ if __name__ == '__main__':
             meta_path_limit.append(meta_path)
 
 
-    cores = 16
+    cores = multiprocessing.cpu_count()-2
     multiprocessing.freeze_support()
     pool = multiprocessing.Pool(processes=cores)
     print("The number of cpu cores is "+str(cores))

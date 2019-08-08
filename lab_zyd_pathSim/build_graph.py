@@ -130,3 +130,20 @@ def init_graph():
 # print(my_graph.number_of_edges())
 # for i in my_graph.neighbors("G:HGNC:5"):
 #     print(i)
+
+def read_node_file(path):
+    nodes = []
+    with open(path, "r",encoding='UTF-8-sig') as fp:
+        lines = fp.readlines()
+        for line in lines:
+            line = line[:-1]
+            nodes.append(line)
+    return nodes
+def get_node_type(node):
+    """
+    Get node type
+    :param node:
+    :return: type
+    """
+    type=node[0]
+    return type

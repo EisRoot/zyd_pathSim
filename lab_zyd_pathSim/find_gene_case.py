@@ -27,9 +27,9 @@ for node in nodes:
         type=get_node_type(neighber)
         count.add(type)
         count_num+=1
-    if len(count)>2:
+    if count_num>100:
         list.append(node)
 print(len(list))
-print(list)
+
 data=pd.DataFrame(list)
 data.to_csv("4DegreeGene_HGNCID.csv",index=None)
