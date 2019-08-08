@@ -124,63 +124,84 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
 
 
 if __name__ == '__main__':
-    time1=datetime.datetime.now().timestamp()
-    g1,g2,fileName=get_parameter()
-    if g1==None:
-        g1='G:HGNC:3433'
-        g2='G:HGNC:17097'
-        fileName="6932_9236"
-    max_length=4
-    zyd=FMP_algo(init_graph())
-    print("Begin to found meta path between " + g1 + " and " + g2)
-    meta_path_candidate=[]
-    re=zyd.start(g1,g2,max_length)
-    for r in re:
-        meta_path_candidate.append(r["meta_path_name"])
-    print(str(len(meta_path_candidate))+" meta paths were found")
-    meta_path_limit=[]
-    meta_path_chosen=[]
-    for candidate in meta_path_candidate:
-        meta_path=cut_meta_path(candidate)
-        if not meta_path == None:
-            meta_path_chosen.append(candidate)
-            print(candidate+"---"+meta_path)
-            meta_path_limit.append(meta_path)
+
+    gene_pair = pd.read_csv("lab_result/gene_pair.csv", index_col=0)
+    gene_pair=gene_pair.sample(40000)
+    print(len(gene_pair))
+    max_length = 4
+    gene_pair = gene_pair.to_records(index=None)
+    re_list=[]
+    re_strs=[]
+    for pair in gene_pair:
+        g1=pair[0]
+        g2=pair[1]
+        fileName=g1+"_"+g1
+
+        time1=datetime.datetime.now().timestamp()
+        # g1,g2,fileName=get_parameter()
+        # if g1==None:
+        #     g1='G:HGNC:6932'
+        #     g2='G:HGNC:9236'
+        #     fileName="6932_9236"
+        max_length=4
+        zyd=FMP_algo(init_graph())
+        print("Begin to found meta path between " + g1 + " and " + g2)
+        meta_path_candidate=[]
+        re=zyd.start(g1,g2,max_length)
+        for r in re:
+            meta_path_candidate.append(r["meta_path_name"])
+        print(str(len(meta_path_candidate))+" meta paths were found")
+        meta_path_limit=[]
+        meta_path_chosen=[]
+        for candidate in meta_path_candidate:
+            meta_path=cut_meta_path(candidate)
+            if not meta_path == None:
+                meta_path_chosen.append(candidate)
+                print(candidate+"---"+meta_path)
+                meta_path_limit.append(meta_path)
 
 
-    cores = multiprocessing.cpu_count()-2
-    multiprocessing.freeze_support()
-    pool = multiprocessing.Pool(processes=cores)
-    print("The number of cpu cores is "+str(cores))
-    gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
+        cores = multiprocessing.cpu_count()-10
+        multiprocessing.freeze_support()
+        pool = multiprocessing.Pool(processes=cores)
+        print("The number of cpu cores is "+str(cores))
+        gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
 
 
-    cores_for_gene1=math.floor(cores/2)
-    cores_for_gene2=cores-cores_for_gene1
-    multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores)
-    multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g2,meta_path_limit,cores)
-    multi_prcoessing_data=multi_prcoessing_data1+multi_prcoessing_data2
+        cores_for_gene1=math.floor(cores/2)
+        cores_for_gene2=cores-cores_for_gene1
+        multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores)
+        multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g2,meta_path_limit,cores)
+        multi_prcoessing_data=multi_prcoessing_data1+multi_prcoessing_data2
 
-    final_score_list =[]
-    for y in pool.imap_unordered(mutil_prcoessing,multi_prcoessing_data):
-        final_score_list=final_score_list+y
-    score_pd=pd.DataFrame(final_score_list)
-    score_pd.to_csv("lab_result/final_score_"+fileName+".csv")
-    print(score_pd)
+        final_score_list =[]
+        for y in pool.imap_unordered(mutil_prcoessing,multi_prcoessing_data):
+            final_score_list=final_score_list+y
+        score_pd=pd.DataFrame(final_score_list)
+        #score_pd.to_csv("lab_result/final_score_"+fileName+".csv")
+        #print(score_pd)
 
-    # score_pd=pd.read_csv("final_score_6932_9236.csv")
-    # meta_path_candidate=['GTG','GDpDpDG']
-    rank_list=read_rank(score_pd,meta_path_chosen,g1,g2)
-    rank_pd=pd.DataFrame(rank_list)
-    rank_pd = rank_pd.sort_values('meta_path_rank')
-    first_one=rank_pd.iloc[0]
-    print("The result is:")
-    print("Meta path:"+first_one['meta_path']+", rank is "+str(int(first_one['meta_path_rank']))+" and total rank is "+str(int(first_one['total_rank'])))
-    time2=datetime.datetime.now().timestamp()
-    print("Cost time:")
-    cost_time=(time2-time1)/60
-    print(str(cost_time)[0:4])
-    rank_pd.to_csv("lab_result/final_result_"+fileName+".csv")
+        rank_list=read_rank(score_pd,meta_path_chosen,g1,g2)
+        re_list.append(rank_list)
+        rank_pd=pd.DataFrame(rank_list)
+        rank_pd = rank_pd.sort_values('meta_path_rank')
+        first_one=rank_pd.iloc[0]
+        print("The result is:")
+        print("Meta path:"+first_one['meta_path']+", rank is "+str(int(first_one['meta_path_rank']))+" and total rank is "+str(int(first_one['total_rank'])))
+        re_strs.append({
+            "result":"Meta path:"+first_one['meta_path']+", rank is "+str(int(first_one['meta_path_rank']))+" and total rank is "+str(int(first_one['total_rank'])),
+            "gene1":g1,
+            "gene2":g2
+        })
+        time2=datetime.datetime.now().timestamp()
+        print("Cost time:")
+        cost_time=(time2-time1)/60
+        print(str(cost_time)[0:4])
+        rank_pd.to_csv("lab_result/final_result_"+fileName+".csv")
+    re_pd=pd.DataFrame(re_list)
+    re_pd.to_csv("lab_result.csv")
+    re_strs=pd.DataFrame(re_strs)
+    re_strs.to_csv("lab_result_str.csv")
 
 
 
