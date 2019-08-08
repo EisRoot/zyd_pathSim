@@ -76,7 +76,6 @@ def mutil_prcoessing(dict_parameter):
         # if score.__len__() > 0:
         #     print(score)
         meta_list = count_meta_path(re,meta_list)
-        print(meta_list)
     print(" ############Processing:"+str(os.getpid())+" is done ###################")
     return meta_list
 def count_meta_path(re,dict):
