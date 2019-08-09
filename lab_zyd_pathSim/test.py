@@ -161,6 +161,8 @@ if __name__ == '__main__':
         for r in re:
             meta_path_candidate.append(r["meta_path_name"])
         print(str(len(meta_path_candidate))+" meta paths were found")
+        if len(meta_path_candidate)==0:
+            continue
         meta_path_limit=[]
         meta_path_chosen=[]
         for candidate in meta_path_candidate:
@@ -184,6 +186,7 @@ if __name__ == '__main__':
         final_score_list =[]
         for y in pool.imap_unordered(mutil_prcoessing,multi_prcoessing_data):
             final_score_list=final_score_list+y
+
         score_pd=pd.DataFrame(final_score_list)
         #score_pd.to_csv("lab_result/final_score_"+fileName+".csv")
         #print(score_pd)
@@ -204,7 +207,7 @@ if __name__ == '__main__':
         print("Cost time:")
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
-        #rank_pd.to_csv("lab_result/final_result_"+fileName+".csv")
+        rank_pd.to_csv("lab_result/final_result_lab.csv",mode='a')
     re_pd=pd.DataFrame(re_list)
     re_pd.to_csv("lab_result.csv")
     re_strs=pd.DataFrame(re_strs)
