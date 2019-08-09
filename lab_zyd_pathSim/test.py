@@ -36,12 +36,11 @@ def mutil_prcoessing(dict_parameter):
         score_list = score_list + score
     print(" ############Processing:"+str(os.getpid())+" is done ###################")
     return score_list
-def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_processings):
+def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_processings,graphs):
     list_len = len(gene_nodes)
     cut_count = math.floor(list_len / cores)
     cut_list = []
     print("Split data("+str(list_len)+") into "+str(cores)+" set:")
-    graph=init_graph()
 
     for i in range(0, cores-1):
         print(str(i * cut_count)+"--"+str(i * cut_count + cut_count - 1))
@@ -51,7 +50,7 @@ def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_proces
             'gene_nodes': piece,
             'max_length': max_length,
             'limit':limit,
-            'graph':graph
+            'graph':graphs1[i]
         })
     i = cores-1
     final_piece = gene_nodes[i * cut_count:list_len - 1]
@@ -61,7 +60,7 @@ def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_proces
         'gene_nodes': final_piece,
         'max_length': max_length,
         'limit':limit,
-        'graph': graph
+        'graph': graphs[i]
     })
     return cut_list
 def get_parameter():
@@ -132,10 +131,19 @@ if __name__ == '__main__':
     gene_pair = gene_pair.to_records(index=None)
     re_list=[]
     re_strs=[]
+    cores = multiprocessing.cpu_count()
+    graphs1=[]
+    for i in range(0,math.floor(cores/2)+1):
+        graphs1.append(init_graph())
+    graphs2=[]
+    for i in range(0,math.floor(cores/2)+1):
+        graphs2.append(init_graph())
     for pair in gene_pair:
         g1=pair[0]
         g2=pair[1]
-        fileName=g1+"_"+g1
+        gname1=g1.replace(":","_")
+        gname2=g2.replace(":","_")
+        fileName=gname1+"_"+gname2
 
         time1=datetime.datetime.now().timestamp()
         # g1,g2,fileName=get_parameter()
@@ -161,17 +169,15 @@ if __name__ == '__main__':
                 meta_path_limit.append(meta_path)
 
 
-        cores = multiprocessing.cpu_count()-10
-        multiprocessing.freeze_support()
+        cores = multiprocessing.cpu_count()-2
         pool = multiprocessing.Pool(processes=cores)
         print("The number of cpu cores is "+str(cores))
         gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
 
-
         cores_for_gene1=math.floor(cores/2)
         cores_for_gene2=cores-cores_for_gene1
-        multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores)
-        multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g2,meta_path_limit,cores)
+        multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores,graphs1)
+        multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g2,meta_path_limit,cores,graphs2)
         multi_prcoessing_data=multi_prcoessing_data1+multi_prcoessing_data2
 
         final_score_list =[]
@@ -197,7 +203,8 @@ if __name__ == '__main__':
         print("Cost time:")
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
-        rank_pd.to_csv("lab_result/final_result_"+fileName+".csv")
+        #rank_pd.to_csv("lab_result/final_result_"+fileName+".csv")
+        pool.terminate()
     re_pd=pd.DataFrame(re_list)
     re_pd.to_csv("lab_result.csv")
     re_strs=pd.DataFrame(re_strs)
