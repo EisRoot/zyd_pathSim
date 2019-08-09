@@ -131,14 +131,14 @@ if __name__ == '__main__':
     gene_pair = gene_pair.to_records(index=None)
     re_list=[]
     re_strs=[]
-    cores = multiprocessing.cpu_count()
+    cores = 20
     graphs1=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs1.append(init_graph())
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
-    cores = multiprocessing.cpu_count()-2
+    cores = 18
     pool = multiprocessing.Pool(processes=cores)
     for pair in gene_pair:
         g1=pair[0]
