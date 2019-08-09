@@ -138,6 +138,8 @@ if __name__ == '__main__':
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
+    cores = multiprocessing.cpu_count()-2
+    pool = multiprocessing.Pool(processes=cores)
     for pair in gene_pair:
         g1=pair[0]
         g2=pair[1]
@@ -169,8 +171,7 @@ if __name__ == '__main__':
                 meta_path_limit.append(meta_path)
 
 
-        cores = multiprocessing.cpu_count()-2
-        pool = multiprocessing.Pool(processes=cores)
+
         print("The number of cpu cores is "+str(cores))
         gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
 
@@ -204,7 +205,6 @@ if __name__ == '__main__':
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
         #rank_pd.to_csv("lab_result/final_result_"+fileName+".csv")
-        pool.terminate()
     re_pd=pd.DataFrame(re_list)
     re_pd.to_csv("lab_result.csv")
     re_strs=pd.DataFrame(re_strs)
