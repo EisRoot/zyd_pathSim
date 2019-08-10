@@ -110,6 +110,8 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
             (pd2['gene1']==gene1)&
             (pd2['gene2']==gene2)
             ]
+        if len(pd3)==0:
+            continue
         meta_path_rank=pd3.iloc[0]['score_rank']
         rank_list.append({
             "meta_path_rank":meta_path_rank,
@@ -195,6 +197,7 @@ if __name__ == '__main__':
         re_list.append(rank_list)
         rank_pd=pd.DataFrame(rank_list)
         rank_pd = rank_pd.sort_values('meta_path_rank')
+
         first_one=rank_pd.iloc[0]
         print("The result is:")
         print("Meta path:"+first_one['meta_path']+", rank is "+str(int(first_one['meta_path_rank']))+" and total rank is "+str(int(first_one['total_rank'])))
