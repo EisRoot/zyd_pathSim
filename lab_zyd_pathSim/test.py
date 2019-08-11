@@ -23,7 +23,7 @@ def mutil_prcoessing(dict_parameter):
     score_list=[]
     for gene2 in gene_nodes:
         count += 1
-        if count % 100 == 0:
+        if count % 500 == 0:
             time = datetime.datetime.now().timestamp() - now_time
             array_time = time / (count)
             left =array_time * (final_len - count) / (60)
@@ -126,8 +126,9 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
 
 if __name__ == '__main__':
 
-    gene_pair = pd.read_csv("lab_result/gene_pair.csv", index_col=0)
-    gene_pair=gene_pair.sample(700)
+    gene_pair = pd.read_csv("lab_result/out_gene_with_EC.csv")
+    sample_num=500
+    gene_pair=gene_pair.sample(sample_num)
     print(len(gene_pair))
     max_length = 4
     gene_pair = gene_pair.to_records(index=None)
@@ -142,7 +143,10 @@ if __name__ == '__main__':
         graphs2.append(init_graph())
     cores = 18
     pool = multiprocessing.Pool(processes=cores)
+    count_pair=0
     for pair in gene_pair:
+        count_pair+=1
+        print(str(count_pair)+"/"+str(sample_num))
         g1=pair[0]
         g2=pair[1]
         gname1=g1.replace(":","_")
@@ -212,9 +216,9 @@ if __name__ == '__main__':
         print(str(cost_time)[0:4])
         rank_pd.to_csv("lab_result/final_result_lab.csv",mode='a')
     re_pd=pd.DataFrame(re_list)
-    re_pd.to_csv("lab_result.csv")
+    re_pd.to_csv("lab_result_EC.csv")
     re_strs=pd.DataFrame(re_strs)
-    re_strs.to_csv("lab_result_str.csv")
+    re_strs.to_csv("lab_result_str_EC.csv")
 
 
 
