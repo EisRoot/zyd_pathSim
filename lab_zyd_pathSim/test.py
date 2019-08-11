@@ -127,7 +127,7 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
 if __name__ == '__main__':
 
     gene_pair = pd.read_csv("lab_result/out_gene_with_EC.csv")
-    sample_num=500
+    sample_num=1000
     gene_pair=gene_pair.sample(sample_num)
     print(len(gene_pair))
     max_length = 4
@@ -216,9 +216,9 @@ if __name__ == '__main__':
         print(str(cost_time)[0:4])
         rank_pd.to_csv("lab_result/final_result_lab.csv",mode='a')
     re_pd=pd.DataFrame(re_list)
-    re_pd.to_csv("lab_result_EC.csv")
+    re_pd.to_csv("lab_result_EC2.csv")
     re_strs=pd.DataFrame(re_strs)
-    re_strs.to_csv("lab_result_str_EC.csv")
+    re_strs.to_csv("lab_result_str_EC2.csv")
 
 
 
