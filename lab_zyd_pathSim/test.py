@@ -147,8 +147,8 @@ if __name__ == '__main__':
     for pair in gene_pair:
         count_pair+=1
         print(str(count_pair)+"/"+str(sample_num))
-        g1=pair[0]
-        g2=pair[1]
+        g1="G:"+pair[0]
+        g2="G:"+pair[1]
         gname1=g1.replace(":","_")
         gname2=g2.replace(":","_")
         fileName=gname1+"_"+gname2
