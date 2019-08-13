@@ -117,7 +117,7 @@ class DGAS_limit_core:
                         count2=found[node]['ins']
                         meta_count+=count['ins']*count2
 
-                        if len(i)>3:
+                        if len(i)>=3:
                             check_len=len(i)-3
                             list1 = count['list']
                             list2 = found[node]['list']
