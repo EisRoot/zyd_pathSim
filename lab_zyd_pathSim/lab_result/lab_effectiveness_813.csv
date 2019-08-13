@@ -1,8 +1,0 @@
-,gene1,gene2,meta_path,meta_path_rank,rank_percent,total_rank
-0,G:HGNC:7849,G:HGNC:7851,GTG,25.0,0.9565972222222222,576.0
-,gene1,gene2,meta_path,meta_path_rank,rank_percent,total_rank
-0,G:HGNC:7849,G:HGNC:7851,GTG,25.0,0.957,576.0
-,gene1,gene2,meta_path,meta_path_rank,rank_percent,total_rank
-2,G:HGNC:3435,G:HGNC:26220,GMDMG,1.0,0.998,645.0
-1,G:HGNC:3435,G:HGNC:26220,GMG,2.0,0.992,244.0
-0,G:HGNC:3435,G:HGNC:26220,GTG,387.0,0.325,573.0
