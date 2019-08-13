@@ -142,14 +142,14 @@ if __name__ == '__main__':
     re_list=[]
     re_strs=[]
     re_rank_percent=[]
-    cores = 6
+    cores = 18
     graphs1=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs1.append(init_graph())
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
-    cores = 5
+    cores = 16
     pool = multiprocessing.Pool(processes=cores)
     count_pair=0
     for pair in gene_pair:
