@@ -1,0 +1,10 @@
+,gene1,gene2,meta_path,meta_path_rank,rank_percent,total_rank,label
+0,G:HGNC:7849,G:HGNC:7851,['GTG'],25.0,0.957,576.0,1
+,gene1,gene2,meta_path,meta_path_rank,rank_percent,total_rank,label
+2,G:HGNC:3435,G:HGNC:26220,['GMDMG'],1.0,0.998,645.0,1
+1,G:HGNC:3435,G:HGNC:26220,['GMG'],2.0,0.992,244.0,1
+5,G:HGNC:3435,G:HGNC:26220,"['GMG', 'GMDMG']",2.0,0.997,651.0,1
+6,G:HGNC:3435,G:HGNC:26220,"['GTG', 'GMG', 'GMDMG']",100.0,0.857,700.0,1
+3,G:HGNC:3435,G:HGNC:26220,"['GTG', 'GMG']",140.0,0.712,486.0,1
+4,G:HGNC:3435,G:HGNC:26220,"['GTG', 'GMDMG']",246.0,0.782,1131.0,1
+0,G:HGNC:3435,G:HGNC:26220,['GTG'],387.0,0.325,573.0,1

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from DGAS_Limit import DGAS_limit_core
+from DGAS_LimitV2 import DGAS_limit_core
 from DGAS_FMPV2 import FMP_algo
 from build_graph import init_graph,read_node_file
 import pandas as pd
@@ -8,6 +8,7 @@ import math
 import multiprocessing
 import sys
 import os
+import copy
 
 def mutil_prcoessing(dict_parameter):
     gene1=dict_parameter['gene1']
@@ -36,6 +37,30 @@ def mutil_prcoessing(dict_parameter):
         score_list = score_list + score
     print(" ############Processing:"+str(os.getpid())+" is done ###################")
     return score_list
+def combine_whole(l):
+    lenth=len(l)
+    list=[]
+    if lenth==0:
+        return []
+    else:
+        for i in range(1,lenth+1):
+            list=list+combine(l,i)
+    return list
+
+def combine(l, n):
+    answers = []
+    one = [0] * n
+
+    def next_c(li=0, ni=0):
+        if ni == n:
+            answers.append(copy.copy(one))
+            return
+        for lj in range(li, len(l)):
+            one[ni] = l[lj]
+            next_c(lj + 1, ni + 1)
+
+    next_c()
+    return answers
 def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_processings,graphs):
     list_len = len(gene_nodes)
     cut_count = math.floor(list_len / cores)
@@ -145,14 +170,14 @@ if __name__ == '__main__':
     re_list=[]
     re_strs=[]
     re_rank_percent=[]
-    cores = 6
+    cores = 26
     graphs1=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs1.append(init_graph())
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
-    cores = 5
+    cores = 24
     pool = multiprocessing.Pool(processes=cores)
     count_pair=0
     for pair in gene_pair:
@@ -193,8 +218,7 @@ if __name__ == '__main__':
             #     "gene2": g2
             # })
             continue
-        else:
-            continue
+
         meta_path_limit=[]
         meta_path_chosen=[]
         for candidate in meta_path_candidate:
@@ -223,9 +247,16 @@ if __name__ == '__main__':
         #score_pd.to_csv("lab_result/final_score_"+fileName+".csv")
         #print(score_pd)
 
-        rank_list=read_rank(score_pd,meta_path_chosen,g1,g2)
+        meta_path_candidate = combine_whole(meta_path_candidate)
+        meta_path_candidate2 = []
+        for i in meta_path_candidate:
+            meta_path_candidate2.append(str(i))
+
+        print(meta_path_candidate2)
+        rank_list=read_rank(score_pd,meta_path_candidate2,g1,g2)
         re_list=re_list+rank_list
         rank_pd=pd.DataFrame(rank_list)
+        print(rank_pd)
         rank_pd = rank_pd.sort_values('meta_path_rank')
 
         first_one=rank_pd.iloc[0]
@@ -242,7 +273,7 @@ if __name__ == '__main__':
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
         rank_pd['label']=pair[4]
-        rank_pd.to_csv("lab_result814/lab_effectiveness_814.csv",mode='a')
+        rank_pd.to_csv("lab_result814/lab_effectiveness_815.csv",mode='a')
         rank_pd = rank_pd.sort_values('rank_percent',ascending=False)
         first_one = rank_pd.iloc[0]
         re_rank_percent.append({
@@ -253,12 +284,12 @@ if __name__ == '__main__':
             "label":pair[4]
         })
         print(first_one['rank_percent'])
-    # re_pd=pd.DataFrame(re_list)
-    # re_pd.to_csv("lab_result814/lab_result_effectiveness_814.csv")
-    # re_strs=pd.DataFrame(re_strs)
-    # re_strs.to_csv("lab_result814/lab_result_str_814.csv")
+    re_pd=pd.DataFrame(re_list)
+    re_pd.to_csv("lab_result814/lab_result_effectiveness_815.csv")
+    re_strs=pd.DataFrame(re_strs)
+    re_strs.to_csv("lab_result814/lab_result_str_815.csv")
     re_rank_percent_pd=pd.DataFrame(re_rank_percent)
-    re_rank_percent_pd.to_csv("lab_result_percent_813.csv",mode="a")
+    re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_815.csv",mode="a")
 
 
 

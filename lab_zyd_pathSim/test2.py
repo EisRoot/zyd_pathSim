@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from DGAS_Limit import DGAS_limit_core
+from DGAS_LimitV2 import DGAS_limit_core
 from DGAS_FMPV2 import FMP_algo
 from build_graph import init_graph
 import pandas as pd
@@ -8,6 +8,7 @@ import math
 import multiprocessing
 import sys
 import os
+import copy
 
 def read_node_file(path):
     nodes = []
@@ -108,7 +109,30 @@ def cut_meta_path(mPath):
         else:
             print("This meta path:" + mPath + " is not symmetrical")
             return None
+def combine_whole(l):
+    lenth=len(l)
+    list=[]
+    if lenth==0:
+        return []
+    else:
+        for i in range(1,lenth+1):
+            list=list+combine(l,i)
+    return list
 
+def combine(l, n):
+    answers = []
+    one = [0] * n
+
+    def next_c(li=0, ni=0):
+        if ni == n:
+            answers.append(copy.copy(one))
+            return
+        for lj in range(li, len(l)):
+            one[ni] = l[lj]
+            next_c(lj + 1, ni + 1)
+
+    next_c()
+    return answers
 def read_rank(pd,meta_path_candidate,gene1,gene2):
     rank_list=[]
     for meta_path in meta_path_candidate:
@@ -121,6 +145,7 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
             (pd2['gene2']==gene2)
             ]
         meta_path_rank=pd3.iloc[0]['score_rank']
+
         rank_list.append({
             "meta_path_rank":meta_path_rank,
             "meta_path":meta_path,
@@ -136,8 +161,8 @@ if __name__ == '__main__':
     time1=datetime.datetime.now().timestamp()
     g1,g2,fileName=get_parameter()
     if g1==None:
-        g1='G:HGNC:7458'
-        g2='G:HGNC:7708'
+        g1='G:HGNC:6932'
+        g2='G:HGNC:9236'
         fileName="6932_9236"
     max_length=4
     zyd=FMP_algo(init_graph())
@@ -179,7 +204,14 @@ if __name__ == '__main__':
 
     # score_pd=pd.read_csv("final_score_6932_9236.csv")
     # meta_path_candidate=['GTG','GDpDpDG']
-    rank_list=read_rank(score_pd,meta_path_chosen,g1,g2)
+    meta_path_candidate=combine_whole(meta_path_candidate)
+    meta_path_candidate2=[]
+
+    for i in meta_path_candidate:
+        meta_path_candidate2.append(str(i))
+    print(meta_path_candidate2)
+
+    rank_list=read_rank(score_pd,meta_path_candidate2,g1,g2)
     rank_pd=pd.DataFrame(rank_list)
     rank_pd = rank_pd.sort_values('meta_path_rank')
     first_one=rank_pd.iloc[0]

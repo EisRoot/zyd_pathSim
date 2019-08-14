@@ -1,6 +1,7 @@
 import networkx as nx
 import math
 import datetime
+import copy
 
 class DGAS_limit_core:
 
@@ -49,12 +50,41 @@ class DGAS_limit_core:
         meta_paths, meta_paths_from_gene1, meta_path_from_gene2=self.find_meta_paths(gene1,gene2,graph,max_step)
         if len(meta_paths)==0:
             return []
+        meta_paths_list=[]
+        for i in meta_paths:
+            meta_paths_list.append(i["meta_path_name"])
+        meta_paths_combine_list=self.combine_whole(meta_paths_list)
 
-        score_list=self.score(meta_paths,meta_paths_from_gene1,meta_path_from_gene2)
+        score_list=self.score(meta_paths,meta_paths_from_gene1,meta_path_from_gene2,meta_paths_combine_list)
         for i in score_list:
             i['gene1']=gene1
             i['gene2']=gene2
         return score_list
+
+    def combine_whole(self,l):
+        lenth=len(l)
+        list=[]
+        if lenth==0:
+            return []
+        else:
+            for i in range(1,lenth+1):
+                list=list+self.combine(l,i)
+        return list
+
+    def combine(self,l, n):
+        answers = []
+        one = [0] * n
+
+        def next_c(li=0, ni=0):
+            if ni == n:
+                answers.append(copy.copy(one))
+                return
+            for lj in range(li, len(l)):
+                one[ni] = l[lj]
+                next_c(lj + 1, ni + 1)
+
+        next_c()
+        return answers
 
     def is_connected(self,gene1,gene2,graph,max_step):
         """
@@ -322,7 +352,7 @@ class DGAS_limit_core:
             tail2center=mPath[center:le][::-1]
             return head2center,tail2center
 
-    def score(self,mPaths,mPathDict1,mPathDict2):
+    def score(self,mPaths,mPathDict1,mPathDict2,meta_paths_combine_list):
         """
 
         :param mPaths: meta paths between gene1 and gene2
@@ -331,17 +361,26 @@ class DGAS_limit_core:
         :return: score_list:
         """
         score_list=[]
-        for a in mPaths:
-            mPath=a['meta_path_name']
-            ins=a['ins']
-            meta_path_half=a['half']
-            hmIns=self.get_ins_of_meta_path(meta_path_half,mPathDict1)
-            tmIns=self.get_ins_of_meta_path(meta_path_half,mPathDict2)
-            score=self.score_kernal_function(ins,hmIns,tmIns)
+        for i in meta_paths_combine_list:
+            total_name=str(i)
+            list_ins = []
+            list_hmIns = []
+            list_tmIns = []
+            for name in i:
+                for a in mPaths:
+                    mPath=a['meta_path_name']
+                    if mPath==name:
+                        ins=a['ins']
+                        list_ins.append(ins)
+                        meta_path_half=a['half']
+                        hmIns=self.get_ins_of_meta_path(meta_path_half,mPathDict1)
+                        list_hmIns.append(hmIns)
+                        tmIns=self.get_ins_of_meta_path(meta_path_half,mPathDict2)
+                        list_tmIns.append(tmIns)
+            score=self.score_kernal_function(list_ins,list_hmIns,list_tmIns)
             score_list.append({
-                'mPath':mPath,
+                'mPath':total_name,
                 'score':score,
-                'ins':ins
             })
 
         return score_list
@@ -354,7 +393,17 @@ class DGAS_limit_core:
         :param tmIns: instance of meta path from tail to center node
         :return: score
         """
-        score=2*ins/(hmIns+tmIns)
+        ins_total=0
+        hmIns_total=0
+        tmIns_total=0
+        for i in ins:
+            ins_total+=i
+        for j in hmIns:
+            hmIns_total+=j
+        for k in tmIns:
+            tmIns_total+=k
+
+        score=2*ins_total/(hmIns_total+tmIns_total)
         return score
 
 
