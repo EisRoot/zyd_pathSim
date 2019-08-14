@@ -183,8 +183,11 @@ if __name__ == '__main__':
                 "meta_path": "",
                 "label": pair[4]
             })
-            continue
-        else:
+            re_strs.append({
+                "result": "no meta path",
+                "gene1": g1,
+                "gene2": g2
+            })
             continue
         meta_path_limit=[]
         meta_path_chosen=[]
