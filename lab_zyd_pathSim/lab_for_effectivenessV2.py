@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from DGAS_LimitV2 import DGAS_limit_core
+from DGAS_LimitV3 import DGAS_limit_core
 from DGAS_FMPV2 import FMP_algo
 from build_graph import init_graph,read_node_file
 import pandas as pd
@@ -273,7 +273,7 @@ if __name__ == '__main__':
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
         rank_pd['label']=pair[4]
-        rank_pd.to_csv("lab_result814/lab_effectiveness_815.csv",mode='a')
+        rank_pd.to_csv("lab_result814/lab_effectiveness_815V2.csv",mode='a')
         rank_pd = rank_pd.sort_values('rank_percent',ascending=False)
         first_one = rank_pd.iloc[0]
         re_rank_percent.append({
@@ -285,11 +285,11 @@ if __name__ == '__main__':
         })
         print(first_one['rank_percent'])
     re_pd=pd.DataFrame(re_list)
-    re_pd.to_csv("lab_result814/lab_result_effectiveness_815.csv")
+    re_pd.to_csv("lab_result814/lab_result_effectiveness_815V2.csv")
     re_strs=pd.DataFrame(re_strs)
-    re_strs.to_csv("lab_result814/lab_result_str_815.csv")
+    re_strs.to_csv("lab_result814/lab_result_str_815V2.csv")
     re_rank_percent_pd=pd.DataFrame(re_rank_percent)
-    re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_815.csv",mode="a")
+    re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_815V2.csv",mode="a")
 
 
 

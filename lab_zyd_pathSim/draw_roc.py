@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.metrics import roc_curve, auc ,roc_auc_score  ###计算roc和auc
 matplotlib.rc('font', family='Times New Roman')
 matplotlib.rcParams.update({'font.size': 25})
-data=pd.read_csv("lab_result814/lab_result_percent_814.csv",dtype=str)
+data=pd.read_csv("lab_result814/lab_result_percent_815.csv",dtype=str)
 data2=pd.read_csv("lab_result_Wang_Resnik_Lin.csv",index_col=0)
 y_score_Wang_CC=data2["Wang_CC"]
 y_score_Wang_BP=data2["Wang_BP"]
