@@ -3,7 +3,7 @@ import pandas as pd
 
 genes=pd.read_csv("zyd_network/gene_without_EC.csv")
 list=[]
-for i in range(0,200):
+for i in range(0,400):
     samples=genes.sample(2)
     H1=samples["HGNC ID"].iloc[0]
     H2=samples["HGNC ID"].iloc[1]
@@ -13,8 +13,9 @@ for i in range(0,200):
         "gene1":H1,
         "gene2":H2,
         "RefSeq1":R1,
-        "RefSeq2":R2
+        "RefSeq2":R2,
+        "label":0
     })
 print(list)
 re=pd.DataFrame(list)
-re.to_csv("negative_pair.csv",index=None)
+re.to_csv("negative_pairV2.csv",index=None)

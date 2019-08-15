@@ -155,8 +155,8 @@ if __name__ == '__main__':
     gr=init_graph()
     print(len(gr.nodes))
     print(len(gr.edges))
-    gene_pair = pd.read_csv("postive_pair2.csv")
-    gene_pair2=pd.read_csv("negative_pair.csv")
+    gene_pair = pd.read_csv("postive_pairV2_2.csv")
+    gene_pair2=pd.read_csv("negative_pairV2.csv")
     max_length = 4
     gene_pair1 = gene_pair.to_records(index=None)
     gene_pair2 =gene_pair2.to_records(index=None)
@@ -170,14 +170,14 @@ if __name__ == '__main__':
     re_list=[]
     re_strs=[]
     re_rank_percent=[]
-    cores = 26
+    cores = 3
     graphs1=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs1.append(init_graph())
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
-    cores = 24
+    cores = 2
     pool = multiprocessing.Pool(processes=cores)
     count_pair=0
     for pair in gene_pair:
@@ -273,7 +273,7 @@ if __name__ == '__main__':
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
         rank_pd['label']=pair[4]
-        rank_pd.to_csv("lab_result814/lab_effectiveness_815V2.csv",mode='a')
+        rank_pd.to_csv("lab_result814/lab_effectiveness_815V3.csv",mode='a')
         rank_pd = rank_pd.sort_values('rank_percent',ascending=False)
         first_one = rank_pd.iloc[0]
         re_rank_percent.append({
@@ -285,11 +285,11 @@ if __name__ == '__main__':
         })
         print(first_one['rank_percent'])
     re_pd=pd.DataFrame(re_list)
-    re_pd.to_csv("lab_result814/lab_result_effectiveness_815V2.csv")
+    re_pd.to_csv("lab_result814/lab_result_effectiveness_815V3.csv")
     re_strs=pd.DataFrame(re_strs)
-    re_strs.to_csv("lab_result814/lab_result_str_815V2.csv")
+    re_strs.to_csv("lab_result814/lab_result_str_815V3.csv")
     re_rank_percent_pd=pd.DataFrame(re_rank_percent)
-    re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_815V2.csv",mode="a")
+    re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_815V3.csv",mode="a")
 
 
 
