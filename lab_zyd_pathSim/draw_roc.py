@@ -11,7 +11,7 @@ from sklearn.metrics import roc_curve, auc ,roc_auc_score  ###计算roc和auc
 matplotlib.rc('font', family='Times New Roman')
 matplotlib.rcParams.update({'font.size': 25})
 data=pd.read_csv("lab_result814/lab_result_percent_815V2.csv",dtype=str)
-data2=pd.read_csv("lab_result_Wang_Resnik_Lin.csv",index_col=0)
+data2=pd.read_csv("lab_result_Wang_Resnik_LinV2.csv",index_col=0)
 y_score_Wang_CC=data2["Wang_CC"]
 y_score_Wang_BP=data2["Wang_BP"]
 y_score_Wang_MF=data2["Wang_MF"]
@@ -86,7 +86,7 @@ plt.plot(fpr, tpr, color='darkorange',
 #          lw=lw, label='Resnik_CC (AUC = %0.3f)' % roc_auc_Resnik_CC)
 # plt.plot(fpr_Lin_CC, tpr_Lin_CC, color='blue',linestyle='dotted',
 #          lw=lw, label='Lin_CC (AUC = %0.3f)' % roc_auc_Lin_CC)
-
+#
 # plt.plot(fpr_Wang_BP, tpr_Wang_BP, color='red',linestyle='dashed',
 #          lw=lw, label='Wang_BP (AUC = %0.3f)' % roc_auc_Wang_BP)
 # plt.plot(fpr_Resnik_BP, tpr_Resnik_BP, color='green',linestyle='dashdot',
@@ -124,5 +124,5 @@ plt.xlabel('False Positive Rate',font2)
 plt.ylabel('True Positive Rate',font2)
 plt.legend(loc="lower right")
 plt.tight_layout()
-plt.savefig('test3.png',dip=1200)
+#plt.savefig('test3.png',dip=1200)
 plt.show()
