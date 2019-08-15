@@ -152,6 +152,7 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
 
 if __name__ == '__main__':
 
+    start_time=datetime.datetime.now().timestamp()
     gr=init_graph()
     print(len(gr.nodes))
     print(len(gr.edges))
@@ -170,14 +171,14 @@ if __name__ == '__main__':
     re_list=[]
     re_strs=[]
     re_rank_percent=[]
-    cores = 3
+    cores = 26
     graphs1=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs1.append(init_graph())
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
-    cores = 2
+    cores = 24
     pool = multiprocessing.Pool(processes=cores)
     count_pair=0
     for pair in gene_pair:
@@ -284,12 +285,18 @@ if __name__ == '__main__':
             "label":pair[4]
         })
         print(first_one['rank_percent'])
+
+
     re_pd=pd.DataFrame(re_list)
     re_pd.to_csv("lab_result814/lab_result_effectiveness_815V3.csv")
     re_strs=pd.DataFrame(re_strs)
     re_strs.to_csv("lab_result814/lab_result_str_815V3.csv")
     re_rank_percent_pd=pd.DataFrame(re_rank_percent)
     re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_815V3.csv",mode="a")
+    end_time = datetime.datetime.now().timestamp()
+    during_time = end_time - start_time / 60
+    print("during time is:")
+    print(during_time)
 
 
 
