@@ -94,8 +94,8 @@ def get_parameter():
         exit()
         return None,None,None
     else:
-        max_length = "G:HGNC:" + str(sys.argv[1])
-        parallel = "G:HGNC:" + str(sys.argv[2])
+        max_length = sys.argv[1]
+        parallel = sys.argv[2]
 
 
         return max_length, parallel
