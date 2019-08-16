@@ -150,8 +150,8 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
 
 if __name__ == '__main__':
 
-    start_time=datetime.datetime.now().timestamp()
     max_length,parallel=get_parameter()
+    max_length=int(max_length)
     gr=init_graph()
     gene_pair = pd.read_csv("postive_pairV2_2.csv")
     if parallel:
@@ -175,6 +175,7 @@ if __name__ == '__main__':
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
+    start_time=datetime.datetime.now().timestamp()
     cores = core_num
     pool = multiprocessing.Pool(processes=cores)
     count_pair=0
