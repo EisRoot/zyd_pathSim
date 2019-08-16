@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.metrics import roc_curve, auc ,roc_auc_score  ###计算roc和auc
 matplotlib.rc('font', family='Times New Roman')
 matplotlib.rcParams.update({'font.size': 25})
-data=pd.read_csv("lab_result814/lab_result_percent_815V2.csv",dtype=str)
+data=pd.read_csv("lab_result814/lab_result_percent_815V3.csv",dtype=str)
 data2=pd.read_csv("lab_result_Wang_Resnik_LinV2.csv",index_col=0)
 y_score_Wang_CC=data2["Wang_CC"]
 y_score_Wang_BP=data2["Wang_BP"]
@@ -80,19 +80,19 @@ plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
 plt.plot(fpr, tpr, color='darkorange',
          lw=lw, label='SCENARIO (AUC = %0.3f)' % roc_auc)  ###假正率为横坐标，真正率为纵坐标做曲线
-# plt.plot(fpr_Wang_CC, tpr_Wang_CC, color='red',linestyle='dashed',
-#          lw=lw, label='Wang_CC (AUC = %0.3f)' % roc_auc_Wang_CC)
-# plt.plot(fpr_Resnik_CC, tpr_Resnik_CC, color='green',linestyle='dashdot',
-#          lw=lw, label='Resnik_CC (AUC = %0.3f)' % roc_auc_Resnik_CC)
-# plt.plot(fpr_Lin_CC, tpr_Lin_CC, color='blue',linestyle='dotted',
-#          lw=lw, label='Lin_CC (AUC = %0.3f)' % roc_auc_Lin_CC)
-#
-# plt.plot(fpr_Wang_BP, tpr_Wang_BP, color='red',linestyle='dashed',
-#          lw=lw, label='Wang_BP (AUC = %0.3f)' % roc_auc_Wang_BP)
-# plt.plot(fpr_Resnik_BP, tpr_Resnik_BP, color='green',linestyle='dashdot',
-#          lw=lw, label='Resnik_BP (AUC = %0.3f)' % roc_auc_Resnik_BP)
-# plt.plot(fpr_Lin_BP, tpr_Lin_BP, color='blue',linestyle='dotted',
-#          lw=lw, label='Lin_BP (AUC = %0.3f)' % roc_auc_Lin_BP)
+plt.plot(fpr_Wang_CC, tpr_Wang_CC, color='red',linestyle='dashed',
+         lw=lw, label='Wang_CC (AUC = %0.3f)' % roc_auc_Wang_CC)
+plt.plot(fpr_Resnik_CC, tpr_Resnik_CC, color='green',linestyle='dashdot',
+         lw=lw, label='Resnik_CC (AUC = %0.3f)' % roc_auc_Resnik_CC)
+plt.plot(fpr_Lin_CC, tpr_Lin_CC, color='blue',linestyle='dotted',
+         lw=lw, label='Lin_CC (AUC = %0.3f)' % roc_auc_Lin_CC)
+
+plt.plot(fpr_Wang_BP, tpr_Wang_BP, color='red',linestyle='dashed',
+         lw=lw, label='Wang_BP (AUC = %0.3f)' % roc_auc_Wang_BP)
+plt.plot(fpr_Resnik_BP, tpr_Resnik_BP, color='green',linestyle='dashdot',
+         lw=lw, label='Resnik_BP (AUC = %0.3f)' % roc_auc_Resnik_BP)
+plt.plot(fpr_Lin_BP, tpr_Lin_BP, color='blue',linestyle='dotted',
+         lw=lw, label='Lin_BP (AUC = %0.3f)' % roc_auc_Lin_BP)
 
 plt.plot(fpr_Wang_MF, tpr_Wang_MF, color='red',linestyle='dashed',
          lw=lw, label='Wang_MF (AUC = %0.3f)' % roc_auc_Wang_MF)

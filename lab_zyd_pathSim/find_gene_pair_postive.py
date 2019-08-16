@@ -27,7 +27,7 @@ for name, group in genes.groupby('Enzyme IDs'):
 
 
 re=pd.DataFrame(final_list)
-re2=re.sample(200)
-re2.to_csv("postive_pairV2.csv",index=None)
+re2=re.sample(400)
+re2.to_csv("label_result816/postive_pair_400.csv",index=None)
 re3=re2[["RefSeq1","RefSeq2","gene1","gene2","label"]]
-re3.to_csv("postive_pairV2_2.csv",index=None)
+re3.to_csv("label_result816/postive_pair_400_2.csv",index=None)
