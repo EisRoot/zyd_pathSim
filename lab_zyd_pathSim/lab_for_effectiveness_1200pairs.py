@@ -274,7 +274,7 @@ if __name__ == '__main__':
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
         rank_pd['label']=pair[4]
-        rank_pd.to_csv("lab_result816/lab_effectiveness_1200.csv",mode='a')
+        #rank_pd.to_csv("lab_result816/lab_effectiveness_1200.csv",mode='a')
         rank_pd = rank_pd.sort_values('rank_percent',ascending=False)
         first_one = rank_pd.iloc[0]
         re_rank_percent.append({
