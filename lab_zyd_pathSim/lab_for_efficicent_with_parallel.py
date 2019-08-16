@@ -154,7 +154,7 @@ if __name__ == '__main__':
     max_length=int(max_length)
     gr=init_graph()
     gene_pair = pd.read_csv("postive_pairV2_2.csv")
-    if parallel:
+    if parallel ==1:
         core_num=16
     else:
         core_num=1
@@ -231,7 +231,7 @@ if __name__ == '__main__':
 
         print("The number of cpu cores is "+str(cores))
         gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
-        if parallel:
+        if parallel==1:
             cores_for_gene1 = math.floor(cores / 2)
             cores_for_gene2 = cores - cores_for_gene1
         else:
