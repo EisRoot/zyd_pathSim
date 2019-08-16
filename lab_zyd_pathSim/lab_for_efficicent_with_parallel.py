@@ -90,17 +90,15 @@ def create_multi_task_data(gene_nodes,cores,max_length,gene1,limit,num_of_proces
     return cut_list
 def get_parameter():
     if len(sys.argv) < 3:
-        print(" Use G:HGNC:6932 and G:HGNC:9236 as input")
-        #exit()
+        print("input max length and parallel flag(1 for True, 0 for False)")
+        exit()
         return None,None,None
-        # gene1="G:HGNC:6932"
-        # fileName="HGNC6932"
     else:
-        gene1 = "G:HGNC:" + str(sys.argv[1])
-        gene2 = "G:HGNC:" + str(sys.argv[2])
-        fileName = "HGNC" + str(sys.argv[1]) + "_HGNC" + str(sys.argv[2])
+        max_length = "G:HGNC:" + str(sys.argv[1])
+        parallel = "G:HGNC:" + str(sys.argv[2])
 
-        return gene1, gene2, fileName
+
+        return max_length, parallel
 def cut_meta_path(mPath):
     """
     Cut meta_path string into two part.
@@ -153,32 +151,31 @@ def read_rank(pd,meta_path_candidate,gene1,gene2):
 if __name__ == '__main__':
 
     start_time=datetime.datetime.now().timestamp()
+    max_length,parallel=get_parameter()
     gr=init_graph()
-    print(len(gr.nodes))
-    print(len(gr.edges))
     gene_pair = pd.read_csv("postive_pairV2_2.csv")
-    gene_pair2=pd.read_csv("negative_pairV2.csv")
-    max_length = 4
-    gene_pair1 = gene_pair.to_records(index=None)
-    gene_pair2 =gene_pair2.to_records(index=None)
+    if parallel:
+        core_num=16
+    else:
+        core_num=1
+    gene_pair1 = gene_pair.to_records(index=None)[0:20]
     gene_pair =[]
     for i in gene_pair1:
         gene_pair.append(i)
-    for i in gene_pair2:
-        gene_pair.append(i)
     print(gene_pair)
     total=len(gene_pair)
+    print(total)
     re_list=[]
     re_strs=[]
     re_rank_percent=[]
-    cores = 18
+    cores = core_num+2
     graphs1=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs1.append(init_graph())
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
-    cores = 16
+    cores = core_num
     pool = multiprocessing.Pool(processes=cores)
     count_pair=0
     for pair in gene_pair:
@@ -234,10 +231,9 @@ if __name__ == '__main__':
         print("The number of cpu cores is "+str(cores))
         gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
 
-        cores_for_gene1=math.floor(cores/2)
-        cores_for_gene2=cores-cores_for_gene1
-        multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores,graphs1)
-        multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene2,max_length,g2,meta_path_limit,cores,graphs2)
+
+        multi_prcoessing_data1=create_multi_task_data(gene_nodes,1,max_length,g1,meta_path_limit,cores,graphs1)
+        multi_prcoessing_data2=create_multi_task_data(gene_nodes,1,max_length,g2,meta_path_limit,cores,graphs2)
         multi_prcoessing_data=multi_prcoessing_data1+multi_prcoessing_data2
 
         final_score_list =[]
@@ -294,7 +290,7 @@ if __name__ == '__main__':
     re_rank_percent_pd=pd.DataFrame(re_rank_percent)
     re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_600.csv",mode="a")
     end_time = datetime.datetime.now().timestamp()
-    during_time = end_time - start_time / 60
+    during_time = (end_time - start_time) / (60*total)
     print("during time is:")
     print(during_time)
 

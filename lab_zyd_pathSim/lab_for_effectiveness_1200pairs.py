@@ -156,8 +156,8 @@ if __name__ == '__main__':
     gr=init_graph()
     print(len(gr.nodes))
     print(len(gr.edges))
-    gene_pair = pd.read_csv("postive_pairV2_2.csv")
-    gene_pair2=pd.read_csv("negative_pairV2.csv")
+    gene_pair = pd.read_csv("label_result816/postive_pair_400_2.csv")
+    gene_pair2=pd.read_csv("label_result816/negative_pair_800.csv")
     max_length = 4
     gene_pair1 = gene_pair.to_records(index=None)
     gene_pair2 =gene_pair2.to_records(index=None)
@@ -166,7 +166,7 @@ if __name__ == '__main__':
         gene_pair.append(i)
     for i in gene_pair2:
         gene_pair.append(i)
-    print(gene_pair)
+    # print(gene_pair)
     total=len(gene_pair)
     re_list=[]
     re_strs=[]
@@ -274,7 +274,7 @@ if __name__ == '__main__':
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
         rank_pd['label']=pair[4]
-        rank_pd.to_csv("lab_result814/lab_effectiveness_815V3.csv",mode='a')
+        rank_pd.to_csv("lab_result816/lab_effectiveness_1200.csv",mode='a')
         rank_pd = rank_pd.sort_values('rank_percent',ascending=False)
         first_one = rank_pd.iloc[0]
         re_rank_percent.append({
@@ -288,13 +288,13 @@ if __name__ == '__main__':
 
 
     re_pd=pd.DataFrame(re_list)
-    re_pd.to_csv("lab_result814/lab_result_effectiveness_815V3.csv")
+    re_pd.to_csv("lab_result816/lab_result_effectiveness_1200.csv")
     re_strs=pd.DataFrame(re_strs)
-    re_strs.to_csv("lab_result814/lab_result_str_815V3.csv")
+    re_strs.to_csv("lab_result816/lab_result_str_1200.csv")
     re_rank_percent_pd=pd.DataFrame(re_rank_percent)
-    re_rank_percent_pd.to_csv("lab_result814/lab_result_percent_600.csv",mode="a")
+    re_rank_percent_pd.to_csv("lab_result816/lab_result_percent_1200.csv",mode="a")
     end_time = datetime.datetime.now().timestamp()
-    during_time = end_time - start_time / 60
+    during_time =(end_time - start_time) / 60
     print("during time is:")
     print(during_time)
 
