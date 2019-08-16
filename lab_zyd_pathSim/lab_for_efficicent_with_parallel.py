@@ -158,7 +158,7 @@ if __name__ == '__main__':
         core_num=16
     else:
         core_num=1
-    gene_pair1 = gene_pair.to_records(index=None)[0:20]
+    gene_pair1 = gene_pair.to_records(index=None)[0:5]
     gene_pair =[]
     for i in gene_pair1:
         gene_pair.append(i)
@@ -193,7 +193,7 @@ if __name__ == '__main__':
         #     g1='G:HGNC:6932'
         #     g2='G:HGNC:9236'
         #     fileName="6932_9236"
-        max_length=4
+
         zyd=FMP_algo(init_graph())
         print("Begin to found meta path between " + g1 + " and " + g2)
         meta_path_candidate=[]
