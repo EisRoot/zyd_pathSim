@@ -161,8 +161,8 @@ if __name__ == '__main__':
     time1=datetime.datetime.now().timestamp()
     g1,g2,fileName=get_parameter()
     if g1==None:
-        g1='G:HGNC:8590'
-        g2='G:HGNC:9381'
+        g1='G:HGNC:4236'
+        g2='G:HGNC:9756'
         fileName="6932_9236"
     max_length=4
     zyd=FMP_algo(init_graph())
