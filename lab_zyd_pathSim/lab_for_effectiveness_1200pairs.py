@@ -171,14 +171,14 @@ if __name__ == '__main__':
     re_list=[]
     re_strs=[]
     re_rank_percent=[]
-    cores = 16
+    cores = 18
     graphs1=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs1.append(init_graph())
     graphs2=[]
     for i in range(0,math.floor(cores/2)+1):
         graphs2.append(init_graph())
-    cores = 14
+    cores = 16
     pool = multiprocessing.Pool(processes=cores)
     count_pair=0
     for pair in gene_pair:
@@ -253,7 +253,10 @@ if __name__ == '__main__':
 
         print(meta_path_candidate2)
         rank_list=read_rank(score_pd,meta_path_candidate2,g1,g2)
+        if(len(rank_list)==0):
+            continue
         re_list=re_list+rank_list
+
         rank_pd=pd.DataFrame(rank_list)
         print(rank_pd)
         rank_pd = rank_pd.sort_values('meta_path_rank')
@@ -272,7 +275,7 @@ if __name__ == '__main__':
         cost_time=(time2-time1)/60
         print(str(cost_time)[0:4])
         rank_pd['label']=pair[4]
-        #rank_pd.to_csv("lab_result816/lab_effectiveness_1200.csv",mode='a')
+        rank_pd.to_csv("lab_result816/lab_effectiveness_1200.csv",mode='a')
         rank_pd = rank_pd.sort_values('rank_percent',ascending=False)
         first_one = rank_pd.iloc[0]
         re_rank_percent.append({
@@ -283,6 +286,8 @@ if __name__ == '__main__':
             "label":pair[4]
         })
         print(first_one['rank_percent'])
+        re_rank_percent_pd = pd.DataFrame(re_rank_percent)
+        re_rank_percent_pd.to_csv("lab_result816/lab_result_percent_1200vv2.csv", mode="a")
 
 
     re_pd=pd.DataFrame(re_list)

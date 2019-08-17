@@ -78,21 +78,21 @@ lw = 4
 plt.figure(figsize=(10, 10))
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
-plt.plot(fpr, tpr, color='darkorange',
+plt.plot(fpr, tpr,
          lw=lw, label='SCENARIO (AUC = %0.3f)' % roc_auc)  ###假正率为横坐标，真正率为纵坐标做曲线
-plt.plot(fpr_Wang_CC, tpr_Wang_CC, color='red',linestyle='dashed',
-         lw=lw, label='Wang_CC (AUC = %0.3f)' % roc_auc_Wang_CC)
-plt.plot(fpr_Resnik_CC, tpr_Resnik_CC, color='green',linestyle='dashdot',
-         lw=lw, label='Resnik_CC (AUC = %0.3f)' % roc_auc_Resnik_CC)
-plt.plot(fpr_Lin_CC, tpr_Lin_CC, color='blue',linestyle='dotted',
-         lw=lw, label='Lin_CC (AUC = %0.3f)' % roc_auc_Lin_CC)
-
-plt.plot(fpr_Wang_BP, tpr_Wang_BP, color='red',linestyle='dashed',
-         lw=lw, label='Wang_BP (AUC = %0.3f)' % roc_auc_Wang_BP)
-plt.plot(fpr_Resnik_BP, tpr_Resnik_BP, color='green',linestyle='dashdot',
-         lw=lw, label='Resnik_BP (AUC = %0.3f)' % roc_auc_Resnik_BP)
-plt.plot(fpr_Lin_BP, tpr_Lin_BP, color='blue',linestyle='dotted',
-         lw=lw, label='Lin_BP (AUC = %0.3f)' % roc_auc_Lin_BP)
+# plt.plot(fpr_Wang_CC, tpr_Wang_CC, color='red',linestyle='dashed',
+#          lw=lw, label='Wang_CC (AUC = %0.3f)' % roc_auc_Wang_CC)
+# plt.plot(fpr_Resnik_CC, tpr_Resnik_CC, color='green',linestyle='dashdot',
+#          lw=lw, label='Resnik_CC (AUC = %0.3f)' % roc_auc_Resnik_CC)
+# plt.plot(fpr_Lin_CC, tpr_Lin_CC, color='black',linestyle='dotted',
+#          lw=lw, label='Lin_CC (AUC = %0.3f)' % roc_auc_Lin_CC)
+#
+# plt.plot(fpr_Wang_BP, tpr_Wang_BP, color='red',linestyle='dashed',
+#          lw=lw, label='Wang_BP (AUC = %0.3f)' % roc_auc_Wang_BP)
+# plt.plot(fpr_Resnik_BP, tpr_Resnik_BP, color='green',linestyle='dashdot',
+#          lw=lw, label='Resnik_BP (AUC = %0.3f)' % roc_auc_Resnik_BP)
+# plt.plot(fpr_Lin_BP, tpr_Lin_BP, color='black',linestyle='dotted',
+#          lw=lw, label='Lin_BP (AUC = %0.3f)' % roc_auc_Lin_BP)
 
 plt.plot(fpr_Wang_MF, tpr_Wang_MF, color='red',linestyle='dashed',
          lw=lw, label='Wang_MF (AUC = %0.3f)' % roc_auc_Wang_MF)
@@ -100,7 +100,7 @@ plt.plot(fpr_Wang_MF, tpr_Wang_MF, color='red',linestyle='dashed',
 #          lw=lw, label=r'$\mathit{Resnik\_MF(AUC=%0.3f)}$' % roc_auc_Resnik_MF)
 plt.plot(fpr_Resnik_MF, tpr_Resnik_MF, color='green',linestyle='dashdot',
          lw=lw, label='Resnik_MF (AUC = %0.3f)' % roc_auc_Resnik_MF)
-plt.plot(fpr_Lin_MF, tpr_Lin_MF, color='blue',linestyle='dotted',
+plt.plot(fpr_Lin_MF, tpr_Lin_MF, color='black',linestyle='dotted',
          lw=lw, label='Lin_MF (AUC = %0.3f)' % roc_auc_Lin_MF)
 font2 = {'family': 'Times New Roman',
 'weight' : 'normal',
@@ -124,5 +124,5 @@ plt.xlabel('False Positive Rate',font2)
 plt.ylabel('True Positive Rate',font2)
 plt.legend(loc="lower right")
 plt.tight_layout()
-#plt.savefig('test3.png',dip=1200)
+plt.savefig('SMF.png',dip=1200)
 plt.show()
