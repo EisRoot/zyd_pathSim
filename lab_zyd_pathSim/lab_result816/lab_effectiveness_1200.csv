@@ -1,0 +1,4 @@
+,gene1,gene2,meta_path,meta_path_rank,rank_percent,total_rank,label
+0,G:HGNC:9402,G:HGNC:8591,['GPdPG'],3.0,0.932,44.0,1
+1,G:HGNC:9402,G:HGNC:8591,['GTG'],48.0,0.931,696.0,1
+2,G:HGNC:9402,G:HGNC:8591,"['GPdPG', 'GTG']",83.0,0.81,436.0,1
