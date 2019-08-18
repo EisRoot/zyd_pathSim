@@ -6,12 +6,13 @@ Created on Thu Sep 21 16:13:04 2017
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+
 import pandas as pd
 from sklearn.metrics import roc_curve, auc ,roc_auc_score  ###计算roc和auc
 matplotlib.rc('font', family='Times New Roman')
-matplotlib.rcParams.update({'font.size': 25})
-data=pd.read_csv("lab_result816/lab_result_percent_1200V2.csv",dtype=str)
-data2=pd.read_csv("lab_result816/lab_result_Wang_Resnik_Lin_1200_V2.csv",)
+matplotlib.rcParams.update({'font.size': 30})
+data=pd.read_csv("lab_result816/lab_result_percent_1200.csv",dtype=str)
+data2=pd.read_csv("lab_result816/lab_result_Wang_Resnik_Lin_1200.csv",)
 y_score_Wang_CC=data2["Wang_CC"]
 y_score_Wang_BP=data2["Wang_BP"]
 y_score_Wang_MF=data2["Wang_MF"]
@@ -73,56 +74,63 @@ roc_auc_Lin_CC = auc(fpr_Lin_CC, tpr_Lin_CC)  ###计算auc的值
 roc_auc_Lin_BP = auc(fpr_Lin_BP, tpr_Lin_BP)  ###计算auc的值
 roc_auc_Lin_MF = auc(fpr_Lin_MF, tpr_Lin_MF)  ###计算auc的值
 
-fig,ax=plt.subplots()
+
 lw = 4
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(10,10))
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
-plt.plot(fpr, tpr,
-         lw=lw, label='SCENARIO (AUC = %0.3f)' % roc_auc)  ###假正率为横坐标，真正率为纵坐标做曲线
-# plt.plot(fpr_Wang_CC, tpr_Wang_CC, color='red',linestyle='dashed',
-#          lw=lw, label='Wang_CC (AUC = %0.3f)' % roc_auc_Wang_CC)
-# plt.plot(fpr_Resnik_CC, tpr_Resnik_CC, color='green',linestyle='dashdot',
-#          lw=lw, label='Resnik_CC (AUC = %0.3f)' % roc_auc_Resnik_CC)
-# plt.plot(fpr_Lin_CC, tpr_Lin_CC, color='black',linestyle='dotted',
-#          lw=lw, label='Lin_CC (AUC = %0.3f)' % roc_auc_Lin_CC)
-#
-# plt.plot(fpr_Wang_BP, tpr_Wang_BP, color='red',linestyle='dashed',
-#          lw=lw, label='Wang_BP (AUC = %0.3f)' % roc_auc_Wang_BP)
-# plt.plot(fpr_Resnik_BP, tpr_Resnik_BP, color='green',linestyle='dashdot',
-#          lw=lw, label='Resnik_BP (AUC = %0.3f)' % roc_auc_Resnik_BP)
-# plt.plot(fpr_Lin_BP, tpr_Lin_BP, color='black',linestyle='dotted',
-#          lw=lw, label='Lin_BP (AUC = %0.3f)' % roc_auc_Lin_BP)
+#ytick.minor.pad      : 3.4    ## distance to the minor tick label in points
 
-plt.plot(fpr_Wang_MF, tpr_Wang_MF, color='red',linestyle='dashed',
-         lw=lw, label='Wang_MF (AUC = %0.3f)' % roc_auc_Wang_MF)
-# plt.plot(fpr_Resnik_MF, tpr_Resnik_MF, color='green',linestyle='dashdot',
-#          lw=lw, label=r'$\mathit{Resnik\_MF(AUC=%0.3f)}$' % roc_auc_Resnik_MF)
-plt.plot(fpr_Resnik_MF, tpr_Resnik_MF, color='green',linestyle='dashdot',
-         lw=lw, label='Resnik_MF (AUC = %0.3f)' % roc_auc_Resnik_MF)
-plt.plot(fpr_Lin_MF, tpr_Lin_MF, color='black',linestyle='dotted',
-         lw=lw, label='Lin_MF (AUC = %0.3f)' % roc_auc_Lin_MF)
+plt.plot(fpr, tpr,color='red',
+         lw=lw, label='SCENARIO\n(AUC = %0.3f)' % roc_auc)  ###假正率为横坐标，真正率为纵坐标做曲线
+# plt.plot(fpr_Wang_CC, tpr_Wang_CC,color='darkblue',
+#          lw=lw, label='Wang_CC\n(AUC = %0.3f)' % roc_auc_Wang_CC)
+# plt.plot(fpr_Resnik_CC, tpr_Resnik_CC, color='darkblue',
+#          lw=lw, label='Resnik_CC\n(AUC = %0.3f)' % roc_auc_Resnik_CC)
+plt.plot(fpr_Lin_CC, tpr_Lin_CC, color='darkblue',
+         lw=lw, label='Lin_CC\n(AUC = %0.3f)' % roc_auc_Lin_CC)
+
+# plt.plot(fpr_Wang_BP, tpr_Wang_BP,
+#          lw=lw, label='Wang_BP\n(AUC = %0.3f)' % roc_auc_Wang_BP,linestyle='dashdot',)
+# plt.plot(fpr_Resnik_BP, tpr_Resnik_BP, linestyle='dashdot',
+#          lw=lw, label='Resnik_BP\n(AUC = %0.3f)' % roc_auc_Resnik_BP)
+plt.plot(fpr_Lin_BP, tpr_Lin_BP,linestyle='dashdot',
+         lw=lw, label='Lin_BP\n(AUC = %0.3f)' % roc_auc_Lin_BP)
+
+# plt.plot(fpr_Wang_MF, tpr_Wang_MF,
+#          lw=lw, label='Wang_MF\n(AUC = %0.3f)' % roc_auc_Wang_MF,linestyle='dashed')
+# plt.plot(fpr_Resnik_MF, tpr_Resnik_MF, linestyle='dashed',
+#          lw=lw, label='Resnik_MF\n(AUC = %0.3f)' % roc_auc_Resnik_MF)
+plt.plot(fpr_Lin_MF, tpr_Lin_MF, linestyle='dashed',
+         lw=lw, label='Lin_MF\n(AUC = %0.3f)' % roc_auc_Lin_MF)
 font2 = {'family': 'Times New Roman',
 'weight' : 'normal',
-'size'   : 35,
+'size'   : 42,
 }
-
+plt.rcParams['ytick.major.left'] = False
+plt.rcParams['ytick.minor.pad'] = 100
 matplotlib.rcParams['mathtext.fontset'] = 'custom'
 matplotlib.rcParams['mathtext.rm'] = 'Times New Roman'
 matplotlib.rcParams['mathtext.it'] = 'Times New Roman:italic'
 
-plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.0])
-plt.xticks(fontsize=28)
-plt.yticks(fontsize=28)
+plt.plot([0, 1], [0, 1], '--',color='lightgrey', lw=3, linestyle='--')
+plt.xlim([0, 1])
+plt.ylim([0, 1])
+plt.xticks([0,0.2,0.4,0.6,0.8,1.0],["0","0.2","0.4","0.6","0.8","1.0"],fontsize=35)
+plt.yticks([0.2,0.4,0.6,0.8,1.0],fontsize=35)
 # xrange=[0,0.2,0.4,0.6,0.8,1.0]
 # lab=['sad','0.2','0.4','0.6','0.8','1.0']
 # ax.set_yticks(xrange)
 # ax.set_yticklabels(lab)
-plt.xlabel('False Positive Rate',font2)
+# ax.spines['bottom'].set_linewidth(3)###设置底部坐标轴的粗细
+# ax.spines['left'].set_linewidth(3)####设置左边坐标轴的粗细
+# ax.spines['right'].set_linewidth(3)###设置右边坐标轴的粗细
+# ax.spines['top'].set_linewidth(3)####设置上部坐标轴的粗细
+
+plt.xlabel('False Positive Rate',fontsize=42)
 plt.ylabel('True Positive Rate',font2)
 plt.legend(loc="lower right")
 plt.tight_layout()
-plt.savefig('SMF.png',dip=1200)
+
+plt.savefig('S_Lin.pdf')
 plt.show()

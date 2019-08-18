@@ -24,7 +24,7 @@ def mutil_prcoessing(dict_parameter):
     score_list=[]
     for gene2 in gene_nodes:
         count += 1
-        if count % 500 == 0:
+        if count % 10 == 0:
             time = datetime.datetime.now().timestamp() - now_time
             array_time = time / (count)
             left =array_time * (final_len - count) / (60)
