@@ -154,10 +154,9 @@ if __name__ == '__main__':
     max_length=int(max_length)
     gr=init_graph()
     gene_pair = pd.read_csv("postive_pairV2_2.csv").sample(5)
-    if parallel ==1:
-        core_num=16
-    else:
-        core_num=1
+
+    core_num=16
+
     gene_pair1 = gene_pair.to_records(index=None)
     gene_pair =[]
     for i in gene_pair1:
@@ -231,12 +230,10 @@ if __name__ == '__main__':
 
         print("The number of cpu cores is "+str(cores))
         gene_nodes=read_node_file("zyd_network/node/node_gene.csv")
-        if parallel==1:
-            cores_for_gene1 = math.floor(cores / 2)
-            cores_for_gene2 = cores - cores_for_gene1
-        else:
-            cores_for_gene1 = 1
-            cores_for_gene2 = 1
+
+        cores_for_gene1 = math.floor(cores / 2)
+        cores_for_gene2 = cores - cores_for_gene1
+
         multi_prcoessing_data1=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g1,meta_path_limit,cores,graphs1)
         multi_prcoessing_data2=create_multi_task_data(gene_nodes,cores_for_gene1,max_length,g2,meta_path_limit,cores,graphs2)
         multi_prcoessing_data=multi_prcoessing_data1+multi_prcoessing_data2
