@@ -153,12 +153,12 @@ if __name__ == '__main__':
     max_length,parallel=get_parameter()
     max_length=int(max_length)
     gr=init_graph()
-    gene_pair = pd.read_csv("postive_pairV2_2.csv")
+    gene_pair = pd.read_csv("postive_pairV2_2.csv").sample(5)
     if parallel ==1:
         core_num=16
     else:
         core_num=1
-    gene_pair1 = gene_pair.to_records(index=None)[0:5]
+    gene_pair1 = gene_pair.to_records(index=None)
     gene_pair =[]
     for i in gene_pair1:
         gene_pair.append(i)
